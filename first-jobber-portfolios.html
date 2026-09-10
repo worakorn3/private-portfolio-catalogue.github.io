@@ -1,0 +1,3442 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>75 US Preset Portfolio Starter Packs for First Jobbers (THB / USD)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              900: '#064e3b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .dark ::-webkit-scrollbar-thumb { background: #334155; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans min-h-full transition-colors duration-200">
+
+  <!-- Floating Prototype Header Banner -->
+  <aside aria-label="Prototype Banner" class="sticky top-0 z-50 bg-indigo-950/90 dark:bg-black/90 text-slate-200 text-xs py-2 px-4 border-b border-indigo-800/40 backdrop-blur flex flex-wrap items-center justify-between gap-2">
+    <div class="flex items-center gap-2">
+      <span class="inline-flex items-center px-2 py-0.5 rounded font-semibold text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+        PROTOTYPE ACTIVE
+      </span>
+      <span class="font-medium text-slate-200">US First-Jobber Portfolio Starter Pack (75 Presets)</span>
+      <span class="text-slate-500">|</span>
+      <span class="text-slate-400">Version 2.1 (Configurable FX & Google Finance Sync)</span>
+    </div>
+    <div class="flex items-center gap-2.5">
+      <!-- Currency Switcher -->
+      <div class="flex items-center bg-slate-900 rounded-lg p-0.5 border border-slate-700">
+        <button id="currThbBtn" onclick="setCurrency('THB')" class="px-2 py-1 rounded text-[11px] font-bold bg-emerald-600 text-white transition">
+          THB (฿)
+        </button>
+        <button id="currUsdBtn" onclick="setCurrency('USD')" class="px-2 py-1 rounded text-[11px] font-bold text-slate-400 hover:text-white transition">
+          USD ($)
+        </button>
+      </div>
+
+      <!-- Configurable FX Rate Box -->
+      <div class="flex items-center gap-1.5 bg-slate-900/90 rounded-lg px-2 py-0.5 border border-slate-700 text-[11px]">
+        <span class="text-slate-400 font-medium">1 USD =</span>
+        <div class="relative flex items-center">
+          <span class="text-slate-400 text-[11px] mr-0.5 font-bold">฿</span>
+          <input type="number" id="headerFxInput" step="0.1" min="20" max="60" value="35.50" onchange="onFxChange(this.value)" 
+                 class="w-14 px-1 py-0.5 bg-slate-800 border border-slate-600 rounded text-xs font-bold text-emerald-400 text-center focus:ring-1 focus:ring-emerald-500 focus:outline-none" title="Type to customize exchange rate">
+        </div>
+        <button id="headerSyncBtn" onclick="syncGoogleFinanceRate()" class="flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-700/60 hover:bg-emerald-600 text-emerald-200 text-[10px] font-semibold border border-emerald-500/40 transition" title="Fetch live exchange rate matching Google Finance">
+          <i data-lucide="refresh-cw" class="w-3 h-3" id="syncIcon"></i>
+          <span class="hidden md:inline">Sync FX</span>
+        </button>
+      </div>
+
+      <div class="hidden sm:flex items-center gap-1 bg-slate-900/60 rounded px-2 py-1 border border-slate-800">
+        <button onclick="filterCategory('all')" class="hover:text-emerald-400 px-1">All (<span id="protoTotalCount">75</span>)</button>
+        <span class="text-slate-700">·</span>
+        <button onclick="openQuizModal()" class="hover:text-emerald-400 px-1 text-emerald-300">Goal Quiz</button>
+        <span class="text-slate-700">·</span>
+        <button onclick="openDcaModal()" class="hover:text-emerald-400 px-1 text-indigo-300">DCA Calc</button>
+        <span class="text-slate-700">·</span>
+        <button onclick="toggleCompareDrawer()" class="hover:text-emerald-400 px-1 text-amber-300">Compare (<span id="protoCompareCount">0</span>)</button>
+      </div>
+
+      <button onclick="toggleDarkMode()" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition flex items-center gap-1" title="Toggle Theme">
+        <i data-lucide="moon" class="w-3.5 h-3.5 dark:hidden"></i>
+        <i data-lucide="sun" class="w-3.5 h-3.5 hidden dark:block"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Navigation / App Header -->
+  <header class="border-b border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur sticky top-8 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-xl shadow-sm">
+          <i data-lucide="pie-chart" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h1 class="font-display font-extrabold text-lg text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+            FirstJobber<span class="text-emerald-500">75</span>
+            <span class="text-[10px] uppercase font-semibold tracking-wider bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-300 dark:border-emerald-800">
+              THB (฿) Mode
+            </span>
+          </h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400">75 US-Listed ETF Portfolios with Risk Matrix for Thai Young Professionals</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button onclick="openQuizModal()" class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold shadow-sm transition">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span>Goal Finder Quiz</span>
+        </button>
+        <button onclick="openDcaModal()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold border border-slate-300 dark:border-slate-700 transition">
+          <i data-lucide="calculator" class="w-4 h-4 text-emerald-500"></i>
+          <span>DCA Simulator (THB)</span>
+        </button>
+        <button onclick="toggleCompareDrawer()" id="headerCompareBtn" class="relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 text-xs font-semibold border border-indigo-200 dark:border-indigo-800 transition">
+          <i data-lucide="scale" class="w-4 h-4"></i>
+          <span>Compare</span>
+          <span id="compareBadge" class="bg-indigo-600 text-white text-[10px] w-4 h-4 rounded-full inline-flex items-center justify-center font-bold">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero & Thai First-Jobber FX Callout -->
+  <section class="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-4">
+    
+    <!-- Thai FX Advisory & Configurator Banner -->
+    <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-900 dark:text-amber-200 text-xs space-y-3">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        <div class="flex items-start gap-2.5">
+          <i data-lucide="info" class="w-4 h-4 text-amber-500 shrink-0 mt-0.5"></i>
+          <div>
+            <span class="font-bold">🇹🇭 Currency & FX Guide for Thai First Jobbers:</span>
+            Returns in Thai Baht fluctuate with the USD/THB exchange rate. You can customize the rate above or use the stress-test scenarios below.
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <a href="https://www.google.com/finance/quote/USD-THB" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">
+            <span>Google Finance Quote</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Stress-Test Scenarios -->
+      <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-amber-500/20 text-[11px]">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span class="font-bold text-amber-800 dark:text-amber-300">FX Stress-Test:</span>
+          <button onclick="onFxChange(32.0)" class="px-2 py-0.5 rounded bg-white/90 dark:bg-slate-800 border border-amber-300 dark:border-amber-700/60 hover:border-emerald-500 text-slate-700 dark:text-slate-200 font-medium transition" title="Simulate strong Thai Baht">
+            ฿32.00 (Strong Baht)
+          </button>
+          <button onclick="onFxChange(35.5)" class="px-2 py-0.5 rounded bg-white/90 dark:bg-slate-800 border border-amber-300 dark:border-amber-700/60 hover:border-emerald-500 text-slate-700 dark:text-slate-200 font-medium transition" title="Simulate baseline exchange rate">
+            ฿35.50 (Baseline)
+          </button>
+          <button onclick="onFxChange(38.0)" class="px-2 py-0.5 rounded bg-white/90 dark:bg-slate-800 border border-amber-300 dark:border-amber-700/60 hover:border-emerald-500 text-slate-700 dark:text-slate-200 font-medium transition" title="Simulate weak Thai Baht / USD surge">
+            ฿38.00 (Weak Baht)
+          </button>
+        </div>
+        <div class="flex items-center gap-1.5 text-[10px]">
+          <span class="text-slate-500 dark:text-slate-400">Current Rate:</span>
+          <span id="activeFxBanner" class="font-mono font-bold text-emerald-600 dark:text-emerald-400">1 USD = ฿35.50</span>
+          <span id="fxSyncStatus" class="text-slate-400 italic">(Default Google Finance)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Card -->
+    <div class="bg-gradient-to-br from-emerald-900/10 via-slate-900/5 to-indigo-900/10 dark:from-emerald-950/30 dark:via-slate-900/40 dark:to-indigo-950/30 rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800/80 shadow-sm relative overflow-hidden">
+      <div class="relative z-10 max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-xs font-semibold mb-3">
+          <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
+          Complete Risk Matrix + Max Drawdown Profiles
+        </div>
+        <h2 class="text-2xl sm:text-4xl font-display font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+          75 Presets for Every Career Milestone & Risk Tolerance
+        </h2>
+        <p class="mt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+          From emergency cash (SGOV) and house deposits, to Boglehead passive indexing, Halal/Shariah portfolios, equal-weight anti-bubble strategies, high-yield covered calls (JEPQ), and young FIRE compounders.
+        </p>
+
+        <!-- Live Metrics Bar -->
+        <div class="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3 pt-5 border-t border-slate-200 dark:border-slate-800">
+          <div>
+            <div class="text-2xl font-extrabold text-slate-900 dark:text-white" id="heroTotalPortfolios">75</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400">Model Portfolios</div>
+          </div>
+          <div>
+            <div class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">14</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400">Goal Clusters</div>
+          </div>
+          <div>
+            <div class="text-2xl font-extrabold text-rose-500 dark:text-rose-400">100%</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400">Drawdown Tested</div>
+          </div>
+          <div>
+            <div class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400">฿35.5</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400">USD/THB Reference</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Controls & Search Strip -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+      
+      <!-- Top Row: Search & Filters -->
+      <div class="flex flex-col md:flex-row gap-3 items-center justify-between">
+        <!-- Search Input -->
+        <div class="relative w-full md:w-96">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-3.5"></i>
+          <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search 75 portfolios (e.g. Halal, VOO, SGOV, AI, Covered Call)..." 
+                 class="w-full pl-9 pr-8 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900 dark:text-white placeholder-slate-400">
+          <button onclick="clearSearch()" id="clearSearchBtn" class="hidden absolute right-3 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <!-- Filter Dropdowns & Stats -->
+        <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto justify-start md:justify-end">
+          <!-- Risk Selector -->
+          <div class="flex items-center gap-1.5">
+            <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Risk:</label>
+            <select id="riskSelect" onchange="applyFilters()" class="text-xs py-2 px-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-emerald-500">
+              <option value="all">All Risks</option>
+              <option value="Conservative">Conservative (Ultra-Low / Low)</option>
+              <option value="Moderate">Moderate (Balanced)</option>
+              <option value="Growth">Growth (High Equity)</option>
+              <option value="Aggressive">Aggressive (100% Equity / Tech)</option>
+            </select>
+          </div>
+
+          <!-- Max Drawdown Filter -->
+          <div class="flex items-center gap-1.5">
+            <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Max Drop:</label>
+            <select id="drawdownSelect" onchange="applyFilters()" class="text-xs py-2 px-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-emerald-500">
+              <option value="all">Any Drawdown</option>
+              <option value="low">Under -15% (Ultra-Defensive)</option>
+              <option value="med">Under -30% (Balanced / 60/40)</option>
+              <option value="high">-30% or more (Full Equity & High Beta)</option>
+            </select>
+          </div>
+
+          <!-- Sort Selector -->
+          <div class="flex items-center gap-1.5">
+            <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Sort:</label>
+            <select id="sortSelect" onchange="applyFilters()" class="text-xs py-2 px-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-emerald-500">
+              <option value="id-asc">Preset # (1 to 75)</option>
+              <option value="fee-asc">Lowest Fee (ER)</option>
+              <option value="drawdown-asc">Safest (Lowest Max Drop)</option>
+              <option value="risk-asc">Risk: Low to High</option>
+              <option value="risk-desc">Risk: High to Low</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Goal Category Filter Pills (Expanded to 14 Clusters) -->
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 pt-1 no-scrollbar text-xs">
+        <button onclick="filterCategory('all')" data-cat="all" class="cat-pill active px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-emerald-600 text-white transition">
+          All 75 Packs
+        </button>
+        <button onclick="filterCategory('emergency')" data-cat="emergency" class="cat-pill px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+          🛡️ Emergency & Cash (5)
+        </button>
+        <button onclick="filterCategory('milestone')" data-cat="milestone" class="cat-pill px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+          🚗 Short Milestones (5)
+        </button>
+        <button onclick="filterCategory('wealth')" data-cat="wealth" class="cat-pill px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+          🏡 Medium Wealth (6)
+        </button>
+        <button onclick="filterCategory('lazy')" data-cat="lazy" class="cat-pill px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+          ☕ Core Boglehead (9)
+        </button>
+        <button onclick="filterCategory('fire')" data-cat="fire" class="cat-pill px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+          🔥 FIRE & Growth (8)
+        </button>
+        <button onclick="filterCategory('dividend')" data-cat="dividend" class="cat-pill px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+          💵 Dividend Snowball (6)
+        </button>
+        <button onclick="filterCategory('thematic')" data-cat="thematic" class="cat-pill px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+          🚀 Tech & Megatrends (7)
+        </button>
+        <button onclick="filterCategory('factor')" data-cat="factor" class="cat-pill px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+          📐 Factor & All-Weather (4)
+        </button>
+        <button onclick="filterCategory('swan')" data-cat="swan" class="cat-pill px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+          🛌 Low-Vol SWAN (4)
+        </button>
+        <button onclick="filterCategory('halal')" data-cat="halal" class="cat-pill px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+          🌙 Shariah / Halal (4)
+        </button>
+        <button onclick="filterCategory('equal')" data-cat="equal" class="cat-pill px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+          ⚖️ Equal-Weight Core (4)
+        </button>
+        <button onclick="filterCategory('options')" data-cat="options" class="cat-pill px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+          ⚡ Covered Call Yield (4)
+        </button>
+        <button onclick="filterCategory('asia')" data-cat="asia" class="cat-pill px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+          🌏 Emerging Asia & India (4)
+        </button>
+        <button onclick="filterCategory('frontier')" data-cat="frontier" class="cat-pill px-3 py-1.5 rounded-full font-medium whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+          💎 Crypto & Capital Efficient (5)
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Portfolio Grid Section -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+    <div class="flex items-center justify-between mb-4">
+      <div class="text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-400">
+        Showing <span id="portfolioCount" class="text-emerald-500 font-bold">75</span> portfolios
+        <span id="filterSubtext" class="text-slate-400 font-normal"></span>
+      </div>
+      <button onclick="resetAllFilters()" class="text-xs text-slate-500 hover:text-emerald-500 dark:hover:text-emerald-400 underline">
+        Reset all filters
+      </button>
+    </div>
+
+    <!-- Cards Grid -->
+    <div id="portfolioGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Injected via JavaScript -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8">
+      <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3 text-slate-400">
+        <i data-lucide="search-x" class="w-6 h-6"></i>
+      </div>
+      <h3 class="text-base font-bold text-slate-900 dark:text-white">No matching portfolios found</h3>
+      <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">Try adjusting your search query, clearing the risk filters, or resetting all filters.</p>
+      <button onclick="resetAllFilters()" class="mt-4 px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-500 transition">
+        Reset All Filters
+      </button>
+    </div>
+  </main>
+
+  <!-- Deep Dive Portfolio Details Modal -->
+  <div id="detailModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Modal Header -->
+      <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-start justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 mb-1.5">
+            <span id="modalIdPill" class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">#01</span>
+            <span id="modalCategoryBadge" class="text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Category</span>
+            <span id="modalRiskBadge" class="text-xs px-2 py-0.5 rounded font-medium">Risk</span>
+          </div>
+          <h3 id="modalTitle" class="text-xl font-bold font-display text-slate-900 dark:text-white">Portfolio Name</h3>
+          <p id="modalTagline" class="text-xs text-slate-500 dark:text-slate-400 mt-1">Short descriptive subtitle</p>
+        </div>
+        <button onclick="closeDetailModal()" class="p-2 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="p-6 overflow-y-auto space-y-6 text-xs sm:text-sm">
+        
+        <!-- Summary Stats Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60">
+            <div class="text-[11px] text-slate-500">Blended Fee (ER)</div>
+            <div id="modalFee" class="text-base font-bold text-slate-900 dark:text-white mt-0.5">0.03%</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60">
+            <div class="text-[11px] text-slate-500">Est. 10Y CAGR</div>
+            <div id="modalCagr" class="text-base font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">8.5% - 11%</div>
+          </div>
+          <div class="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50">
+            <div class="text-[11px] text-rose-600 dark:text-rose-400 font-semibold">Max Drawdown</div>
+            <div id="modalDrawdown" class="text-base font-bold text-rose-700 dark:text-rose-300 mt-0.5">-34.0%</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60">
+            <div class="text-[11px] text-slate-500">Rec. Horizon</div>
+            <div id="modalHorizon" class="text-base font-bold text-indigo-600 dark:text-indigo-400 mt-0.5">5+ Years</div>
+          </div>
+        </div>
+
+        <!-- Risk Factors & Downside Reality Check -->
+        <div class="p-4 rounded-xl bg-rose-50/60 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 space-y-2.5">
+          <div class="font-bold text-rose-800 dark:text-rose-300 text-xs flex items-center gap-1.5">
+            <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-500"></i>
+            Key Risk Drivers & Downside Warning
+          </div>
+          <div id="modalRiskTags" class="flex flex-wrap gap-1.5">
+            <!-- Injected via JS -->
+          </div>
+          <p id="modalWorstCase" class="text-xs text-rose-900/90 dark:text-rose-200/90 leading-relaxed pt-1">
+            Explanation of why and how you could lose money in this portfolio.
+          </p>
+        </div>
+
+        <!-- Asset Allocation Table -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 flex items-center gap-1.5">
+            <i data-lucide="layers" class="w-4 h-4 text-emerald-500"></i>
+            Asset Breakdown & Holdings
+          </h4>
+          <div class="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-500 border-b border-slate-200 dark:border-slate-800">
+                <tr>
+                  <th class="p-3 font-semibold">Ticker</th>
+                  <th class="p-3 font-semibold">Full ETF Name</th>
+                  <th class="p-3 font-semibold">Asset Class</th>
+                  <th class="p-3 font-semibold text-right">Allocation</th>
+                </tr>
+              </thead>
+              <tbody id="modalAllocationTable" class="divide-y divide-slate-100 dark:divide-slate-800/60">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- First Jobber Suitability -->
+        <div class="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40">
+          <div class="font-semibold text-emerald-800 dark:text-emerald-300 text-xs flex items-center gap-1.5 mb-1">
+            <i data-lucide="lightbulb" class="w-4 h-4 text-emerald-500"></i>
+            Why This Fits First-Jobbers & Early Salary DCA
+          </div>
+          <p id="modalSuitability" class="text-xs text-emerald-900 dark:text-emerald-200/90 leading-relaxed">
+            Detailed explanation.
+          </p>
+        </div>
+
+        <!-- Supported Platforms -->
+        <div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Supported US Brokerages & Thai Offshore Apps</div>
+          <div id="modalBrokerList" class="flex flex-wrap gap-2">
+            <!-- Badges injected via JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
+        <button onclick="copyModalPortfolio()" class="flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 shadow-sm transition">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Copy Allocation</span>
+        </button>
+        <div class="flex items-center gap-2">
+          <button id="modalCompareToggleBtn" onclick="toggleCompareCurrentModal()" class="px-3 py-2 bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+            <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+            <span>Add to Compare</span>
+          </button>
+          <button onclick="openDcaWithCurrent()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold shadow-sm transition flex items-center gap-1.5">
+            <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+            <span>Simulate DCA</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DCA Compound Interest Calculator Modal (Supports THB ฿ / USD $) -->
+  <div id="dcaModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      
+      <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+            <i data-lucide="calculator" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold font-display text-slate-900 dark:text-white">Dollar-Cost Averaging (DCA) Simulator</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Simulate monthly salary compounding in Thai Baht (฿) or USD ($)</p>
+          </div>
+        </div>
+        <button onclick="closeDcaModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-6 text-xs sm:text-sm">
+        
+        <!-- Active Linked Portfolio Context Banner -->
+        <div id="dcaPortfolioBanner" class="hidden p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <div class="flex items-start sm:items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm" id="dcaPortfolioIdBadge">#1</div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-slate-900 dark:text-white text-xs sm:text-sm" id="dcaPortfolioName">Portfolio Name</span>
+                <span id="dcaPortfolioRiskBadge" class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Growth</span>
+              </div>
+              <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 flex flex-wrap items-center gap-1.5" id="dcaPortfolioMeta">
+                <!-- Injected allocations and target CAGR -->
+              </div>
+            </div>
+          </div>
+          <button onclick="clearDcaPortfolioLink()" class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 hover:underline shrink-0 self-end sm:self-center">
+            Reset to Generic Benchmarks
+          </button>
+        </div>
+
+        <!-- Interactive Controls -->
+        <div class="space-y-4 bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60">
+          
+          <!-- Monthly Deposit Slider -->
+          <div>
+            <div class="flex justify-between items-center mb-1 text-xs">
+              <span class="font-semibold text-slate-700 dark:text-slate-300">Monthly Contribution (From Salary):</span>
+              <span id="dcaMonthlyLabel" class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">฿5,000 / mo</span>
+            </div>
+            <input type="range" id="dcaMonthlySlider" min="1000" max="50000" step="500" value="5000" oninput="updateDcaCalculations()" class="w-full accent-emerald-500 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1" id="dcaMonthlyTicks">
+              <span>฿1,000</span>
+              <span>฿10,000</span>
+              <span>฿25,000</span>
+              <span>฿50,000</span>
+            </div>
+          </div>
+
+          <!-- Initial Principal Slider -->
+          <div>
+            <div class="flex justify-between items-center mb-1 text-xs">
+              <span class="font-semibold text-slate-700 dark:text-slate-300">Initial Starting Capital:</span>
+              <span id="dcaInitialLabel" class="font-bold text-slate-900 dark:text-white text-sm">฿20,000</span>
+            </div>
+            <input type="range" id="dcaInitialSlider" min="0" max="500000" step="5000" value="20000" oninput="updateDcaCalculations()" class="w-full accent-emerald-500 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg cursor-pointer">
+          </div>
+
+          <!-- Years Slider -->
+          <div>
+            <div class="flex justify-between items-center mb-1 text-xs">
+              <span class="font-semibold text-slate-700 dark:text-slate-300">Time Horizon (Years):</span>
+              <span id="dcaYearsLabel" class="font-bold text-indigo-600 dark:text-indigo-400 text-sm">10 Years</span>
+            </div>
+            <input type="range" id="dcaYearsSlider" min="1" max="30" step="1" value="10" oninput="updateDcaCalculations()" class="w-full accent-indigo-500 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+              <span>1 Year</span>
+              <span>5 Years</span>
+              <span>10 Years</span>
+              <span>20 Years</span>
+              <span>30 Years</span>
+            </div>
+          </div>
+
+          <!-- Return Profile Selector -->
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="font-semibold text-slate-700 dark:text-slate-300 text-xs">Expected Annual Return Profile:</label>
+              <span id="dcaRateSourceTag" class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium"></span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="dcaRateButtonContainer">
+              <button onclick="setDcaRate(4.8, this)" class="dca-rate-btn py-1.5 px-2 rounded border border-slate-300 dark:border-slate-700 text-xs text-center hover:border-emerald-500">
+                <div class="font-bold">4.8%</div>
+                <div class="text-[9px] text-slate-500">T-Bills/Cash</div>
+              </button>
+              <button onclick="setDcaRate(7.5, this)" class="dca-rate-btn py-1.5 px-2 rounded border border-slate-300 dark:border-slate-700 text-xs text-center hover:border-emerald-500">
+                <div class="font-bold">7.5%</div>
+                <div class="text-[9px] text-slate-500">Balanced 60/40</div>
+              </button>
+              <button onclick="setDcaRate(10.0, this)" class="dca-rate-btn active py-1.5 px-2 rounded border-2 border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs text-center">
+                <div class="font-bold">10.0%</div>
+                <div class="text-[9px] text-slate-500">S&P 500 / VTI</div>
+              </button>
+              <button onclick="setDcaRate(13.0, this)" class="dca-rate-btn py-1.5 px-2 rounded border border-slate-300 dark:border-slate-700 text-xs text-center hover:border-emerald-500">
+                <div class="font-bold">13.0%</div>
+                <div class="text-[9px] text-slate-500">Nasdaq / Tech</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- FX Rate Slider in DCA Modal -->
+          <div class="p-2.5 rounded-lg bg-emerald-500/10 dark:bg-emerald-950/30 border border-emerald-500/20 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-1.5">
+              <i data-lucide="arrow-left-right" class="w-3.5 h-3.5 text-emerald-500"></i>
+              <span class="font-semibold text-slate-700 dark:text-slate-300 text-xs">USD/THB Exchange Rate:</span>
+              <span id="dcaFxRateLabel" class="font-mono font-bold text-emerald-600 dark:text-emerald-400">฿35.50</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="range" id="dcaFxSlider" min="28.0" max="42.0" step="0.1" value="35.5" oninput="onFxChange(this.value)" class="w-24 accent-emerald-500 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg cursor-pointer">
+              <button onclick="syncGoogleFinanceRate()" class="px-2 py-0.5 text-[10px] font-semibold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:border-emerald-500 rounded text-slate-700 dark:text-slate-200 flex items-center gap-1 transition">
+                <i data-lucide="refresh-cw" class="w-2.5 h-2.5" id="dcaSyncIcon"></i>
+                <span>Sync Live</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Projection Output Card -->
+        <div class="p-5 rounded-2xl bg-gradient-to-br from-slate-900 to-indigo-950 text-white space-y-4">
+          <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold flex justify-between items-center">
+            <span id="dcaProjectedContextLabel">Projected Compound Portfolio Value</span>
+            <span id="dcaCurrIndicator" class="text-[10px] text-emerald-400 font-mono">Calculated in THB</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="dcaTotalValue" class="text-3xl sm:text-4xl font-extrabold text-emerald-400 font-display">฿1,065,240</span>
+            <span class="text-xs text-slate-400">estimated total</span>
+          </div>
+          <div id="dcaEquivValue" class="text-xs text-slate-400 font-medium flex items-center gap-1.5 -mt-2">
+            <i data-lucide="arrow-right-left" class="w-3 h-3 text-emerald-400"></i>
+            <span id="dcaEquivText">≈ $30,007 USD (@ ฿35.50/USD)</span>
+          </div>
+
+          <!-- Comparison Metrics -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-3 border-t border-slate-800 text-xs">
+            <div>
+              <div class="text-slate-400 text-[11px]">Total Out-Of-Pocket</div>
+              <div id="dcaTotalDeposited" class="font-bold text-white text-sm mt-0.5">฿620,000</div>
+            </div>
+            <div>
+              <div class="text-slate-400 text-[11px]">Compound Interest Earned</div>
+              <div id="dcaTotalInterest" class="font-bold text-emerald-400 text-sm mt-0.5">+฿445,240</div>
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <div class="text-slate-400 text-[11px]">Gain vs Pure Cash</div>
+              <div id="dcaGainPercent" class="font-bold text-indigo-300 text-sm mt-0.5">+71.8%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Proportional Bar Visualizer -->
+        <div>
+          <div class="flex justify-between text-xs text-slate-500 mb-1">
+            <span>Principal Deposited (<span id="dcaDepositPct">58%</span>)</span>
+            <span>Compound Growth (<span id="dcaGrowthPct">42%</span>)</span>
+          </div>
+          <div class="w-full h-3 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden flex">
+            <div id="dcaDepositBar" class="h-full bg-slate-400 dark:bg-slate-500 transition-all duration-300" style="width: 58%"></div>
+            <div id="dcaGrowthBar" class="h-full bg-emerald-500 transition-all duration-300" style="width: 42%"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-800 flex justify-end">
+        <button onclick="closeDcaModal()" class="px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg text-xs font-semibold hover:opacity-90 transition">
+          Close Simulator
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Goal Finder Quiz Modal -->
+  <div id="quizModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 max-w-lg w-full p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+      
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">First-Jobber Goal Finder</h3>
+            <p class="text-xs text-slate-500">Answer 3 questions to find your starter pack</p>
+          </div>
+        </div>
+        <button onclick="closeQuizModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="quizForm" onsubmit="submitQuiz(event)" class="space-y-4 text-xs sm:text-sm">
+        <!-- Question 1 -->
+        <div>
+          <label class="font-bold text-slate-800 dark:text-slate-200 block mb-2">1. What is your primary milestone right now?</label>
+          <div class="space-y-1.5">
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">
+              <input type="radio" name="quizGoal" value="emergency" checked class="accent-emerald-500">
+              <span class="text-xs">Emergency buffer / Stashing liquid cash (0-1 yr)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">
+              <input type="radio" name="quizGoal" value="milestone" class="accent-emerald-500">
+              <span class="text-xs">Down payment on car / Wedding / Relocation (1-3 yrs)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">
+              <input type="radio" name="quizGoal" value="wealth" class="accent-emerald-500">
+              <span class="text-xs">First house down payment / MBA / Side business (3-7 yrs)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">
+              <input type="radio" name="quizGoal" value="fire" class="accent-emerald-500">
+              <span class="text-xs">Maximum wealth compounding / Early FIRE (10+ yrs)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">
+              <input type="radio" name="quizGoal" value="halal" class="accent-emerald-500">
+              <span class="text-xs">Shariah / Halal Compliant Global Investments</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">
+              <input type="radio" name="quizGoal" value="options" class="accent-emerald-500">
+              <span class="text-xs">Monthly covered call cashflow to offset living bills</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div>
+          <label class="font-bold text-slate-800 dark:text-slate-200 block mb-2">2. How would you react if your portfolio drops 20% in a month?</label>
+          <div class="space-y-1.5">
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">
+              <input type="radio" name="quizRisk" value="Conservative" class="accent-emerald-500">
+              <span class="text-xs">I’d panic or lose sleep. I need max drawdown under 10%.</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">
+              <input type="radio" name="quizRisk" value="Moderate" checked class="accent-emerald-500">
+              <span class="text-xs">I'd feel uneasy, but I can hold if there are bonds/dividends.</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">
+              <input type="radio" name="quizRisk" value="Growth" class="accent-emerald-500">
+              <span class="text-xs">I understand volatility is the price of high returns. I hold.</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">
+              <input type="radio" name="quizRisk" value="Aggressive" class="accent-emerald-500">
+              <span class="text-xs">Thrilled! I would double my monthly DCA to buy the dip.</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold shadow-sm transition">
+          Find Matching Portfolios
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Side-by-Side Comparison Drawer (Sticky Bottom) -->
+  <div id="compareDrawer" class="fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-slate-900/95 border-t-2 border-indigo-500 shadow-2xl backdrop-blur transition-transform duration-300 translate-y-full">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      
+      <!-- Drawer Header Bar -->
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <i data-lucide="scale" class="w-4 h-4 text-indigo-500"></i>
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
+            Portfolio Comparison (<span id="compareCount">0</span>/3 Selected)
+          </span>
+          <span class="text-[11px] text-slate-500 hidden sm:inline">— compare fees, max drawdown, and asset mix side-by-side</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="clearComparison()" class="text-[11px] text-slate-500 hover:text-rose-500 underline mr-2">Clear All</button>
+          <button onclick="toggleCompareDrawer()" class="p-1 rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Comparison Slots Grid -->
+      <div id="compareSlots" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <!-- Rendered via JS -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-4 py-2.5 rounded-xl shadow-xl text-xs font-semibold flex items-center gap-2">
+    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 dark:text-emerald-600"></i>
+    <span id="toastMsg">Action completed</span>
+  </div>
+
+  <!-- Complete 75-Portfolio Database & Logic -->
+  <script>
+    // --- CURRENCY & FX SETTINGS ---
+    let activeCurrency = 'THB'; // 'THB' or 'USD'
+    let usdThbRate = 35.50; // Dynamic configurable exchange rate defaulting from Google Finance
+    let isSyncingFx = false;
+
+    // --- 75 UNLOCKED US PRESET PORTFOLIOS DATA WITH DETAILED RISK MATRIX ---
+    const PORTFOLIOS = [
+      // Bucket 1: Emergency & Cash (0-1 yr)
+      {
+        id: 1,
+        name: "The Modern High-Yield Cash Stash",
+        tagline: "High-yield cash preservation with federal tax safety and zero duration risk",
+        category: "Emergency & Cash",
+        catKey: "emergency",
+        risk: "Conservative",
+        riskLevel: 1,
+        maxDrawdown: "-0.2%",
+        maxDrawdownNum: 0.2,
+        primaryRisks: ["Federal Reserve Rate Cuts", "USD/THB FX Fluctuations"],
+        worstCase: "If the Fed aggressively slashes interest rates to zero, your yield drops from ~5% to <1%. If USD weakens against THB, your THB value dips slightly.",
+        horizon: "< 1 Year",
+        horizonKey: "short",
+        expenseRatio: "0.07%",
+        cagrEst: "4.8% - 5.2%",
+        suitability: "Ideal for parking your 3–6 month emergency fund or move-out deposit. Backed by short 0-3 month US Treasury bills.",
+        allocations: [{ ticker: "SGOV", name: "iShares 0-3 Month Treasury Bond ETF", pct: 100, assetClass: "Cash / T-Bills", color: "#10b981" }],
+        brokerages: ["Dime!", "InnovestX", "SCB EASY", "Robinhood", "Fidelity", "Interactive Brokers"]
+      },
+      {
+        id: 2,
+        name: "The Dual-Treasury Cash Anchor",
+        tagline: "Split short-duration liquidity eliminating single-issuer duration friction",
+        category: "Emergency & Cash",
+        catKey: "emergency",
+        risk: "Conservative",
+        riskLevel: 1,
+        maxDrawdown: "-0.3%",
+        maxDrawdownNum: 0.3,
+        primaryRisks: ["Rate Cuts", "USD/THB Currency Risk"],
+        worstCase: "Near zero principal loss risk. Yield contracts if monetary policy pivots toward low interest rates.",
+        horizon: "< 1 Year",
+        horizonKey: "short",
+        expenseRatio: "0.10%",
+        cagrEst: "4.7% - 5.1%",
+        suitability: "Blends SPDR and iShares ultra-short paper to maintain high liquidity with zero credit default risk.",
+        allocations: [
+          { ticker: "SGOV", name: "iShares 0-3 Month Treasury Bond ETF", pct: 60, assetClass: "Cash / T-Bills", color: "#10b981" },
+          { ticker: "BIL", name: "SPDR Bloomberg 1-3 Month T-Bill ETF", pct: 40, assetClass: "Cash / T-Bills", color: "#34d399" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Fidelity", "Schwab"]
+      },
+      {
+        id: 3,
+        name: "The Floating-Rate Yield Maximizer",
+        tagline: "Floating rate notes that adjust coupon payouts whenever Fed rates shift",
+        category: "Emergency & Cash",
+        catKey: "emergency",
+        risk: "Conservative",
+        riskLevel: 1,
+        maxDrawdown: "-0.5%",
+        maxDrawdownNum: 0.5,
+        primaryRisks: ["Declining Fed Benchmark Rates", "USD/THB FX Risk"],
+        worstCase: "Coupons automatically reset lower during monetary easing cycles, lowering income yield.",
+        horizon: "< 1 Year",
+        horizonKey: "short",
+        expenseRatio: "0.14%",
+        cagrEst: "4.9% - 5.4%",
+        suitability: "Shields your liquid cash from interest rate shocks because coupons reset weekly to current Treasury auctions.",
+        allocations: [
+          { ticker: "USFR", name: "WisdomTree Floating Rate Treasury Fund", pct: 50, assetClass: "Floating Treasury", color: "#059669" },
+          { ticker: "TFLO", name: "iShares Treasury Floating Rate Bond ETF", pct: 50, assetClass: "Floating Treasury", color: "#10b981" }
+        ],
+        brokerages: ["Dime!", "Interactive Brokers", "Schwab", "Fidelity"]
+      },
+      {
+        id: 4,
+        name: "Enhanced Cash + Short Corporate Kicker",
+        tagline: "Cash foundation enhanced with short investment-grade corporate yield",
+        category: "Emergency & Cash",
+        catKey: "emergency",
+        risk: "Conservative",
+        riskLevel: 1,
+        maxDrawdown: "-1.8%",
+        maxDrawdownNum: 1.8,
+        primaryRisks: ["Corporate Credit Spread Widening", "Mild Liquidity Drag"],
+        worstCase: "In severe corporate liquidity panics, short commercial paper can take modest mark-to-market hits.",
+        horizon: "< 1 Year",
+        horizonKey: "short",
+        expenseRatio: "0.13%",
+        cagrEst: "5.1% - 5.6%",
+        suitability: "Picks up an extra 40-70 bps of yield over pure Treasuries by holding high-grade corporate short notes.",
+        allocations: [
+          { ticker: "SGOV", name: "iShares 0-3 Month Treasury Bond ETF", pct: 70, assetClass: "Cash / T-Bills", color: "#10b981" },
+          { ticker: "NEAR", name: "iShares Short Maturity Bond ETF", pct: 30, assetClass: "Short Corp Bond", color: "#3b82f6" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Interactive Brokers"]
+      },
+      {
+        id: 5,
+        name: "The Rain-or-Shine Emergency Buffer",
+        tagline: "Safe cash liquidity with a gold micro-slice for tail-risk security",
+        category: "Emergency & Cash",
+        catKey: "emergency",
+        risk: "Conservative",
+        riskLevel: 1,
+        maxDrawdown: "-2.4%",
+        maxDrawdownNum: 2.4,
+        primaryRisks: ["Gold Price Volatility", "USD/THB FX Swings"],
+        worstCase: "A sharp drop in commodity prices can pull down the 5% gold sleeve, causing a minor drawdown.",
+        horizon: "< 1 Year",
+        horizonKey: "short",
+        expenseRatio: "0.08%",
+        cagrEst: "4.8% - 5.8%",
+        suitability: "Combines 80% liquid T-Bills with a 5% physical gold hedge and 15% 1-3 year bonds to buffer unexpected macro shocks.",
+        allocations: [
+          { ticker: "SGOV", name: "iShares 0-3 Month Treasury Bond ETF", pct: 80, assetClass: "Cash / T-Bills", color: "#10b981" },
+          { ticker: "SHY", name: "iShares 1-3 Year Treasury Bond ETF", pct: 15, assetClass: "Short Treasury", color: "#60a5fa" },
+          { ticker: "GLDM", name: "SPDR Gold MiniShares Trust", pct: 5, assetClass: "Precious Metals", color: "#f59e0b" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Fidelity", "Robinhood"]
+      },
+
+      // Bucket 2: Short-Horizon Milestones (1-3 yrs)
+      {
+        id: 6,
+        name: "The First Car & Move-Out Launchpad",
+        tagline: "Preserves car down payment capital while earning modest equity upside",
+        category: "Short Milestones (1-3Y)",
+        catKey: "milestone",
+        risk: "Conservative",
+        riskLevel: 2,
+        maxDrawdown: "-4.2%",
+        maxDrawdownNum: 4.2,
+        primaryRisks: ["Global Equity Bear Market", "Short Yield Curve Shift"],
+        worstCase: "A 40% worldwide stock crash shaves ~4% off the portfolio value due to the 10% VT allocation.",
+        horizon: "1 – 3 Years",
+        horizonKey: "milestone",
+        expenseRatio: "0.06%",
+        cagrEst: "5.2% - 6.5%",
+        suitability: "Designed for a young earner buying a car or moving cities within 24 months. 90% fixed income prevents devastating drops.",
+        allocations: [
+          { ticker: "SGOV", name: "iShares 0-3 Month Treasury Bond ETF", pct: 60, assetClass: "T-Bills", color: "#10b981" },
+          { ticker: "VGSH", name: "Vanguard Short-Term Treasury ETF", pct: 30, assetClass: "Short Bonds", color: "#38bdf8" },
+          { ticker: "VT", name: "Vanguard Total World Stock ETF", pct: 10, assetClass: "Global Equities", color: "#6366f1" }
+        ],
+        brokerages: ["Dime!", "Vanguard", "Fidelity", "Schwab"]
+      },
+      {
+        id: 7,
+        name: "The Conservative Wedding Buffer",
+        tagline: "Down-payment protection with S&P 500 growth for wedding deposits",
+        category: "Short Milestones (1-3Y)",
+        catKey: "milestone",
+        risk: "Moderate",
+        riskLevel: 2,
+        maxDrawdown: "-6.8%",
+        maxDrawdownNum: 6.8,
+        primaryRisks: ["S&P 500 Correction", "Intermediate Treasury Duration Risk"],
+        worstCase: "Simultaneous drop in stocks and rising 5-year yields can temporarily depress portfolio value by 6-7%.",
+        horizon: "1 – 3 Years",
+        horizonKey: "milestone",
+        expenseRatio: "0.05%",
+        cagrEst: "5.5% - 7.2%",
+        suitability: "Keeps 80% safe in Treasuries and T-bills, while giving 20% exposure to America's top 500 companies.",
+        allocations: [
+          { ticker: "VGIT", name: "Vanguard Intermediate Treasury ETF", pct: 50, assetClass: "Intermediate Bond", color: "#0284c7" },
+          { ticker: "SGOV", name: "iShares 0-3 Month Treasury Bond ETF", pct: 30, assetClass: "T-Bills", color: "#10b981" },
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 20, assetClass: "US Large Cap", color: "#4f46e5" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Vanguard", "Fidelity"]
+      },
+      {
+        id: 8,
+        name: "The 80/20 Defensive Milestone",
+        tagline: "Classic conservative institutional split for 2-to-3 year milestone goals",
+        category: "Short Milestones (1-3Y)",
+        catKey: "milestone",
+        risk: "Conservative",
+        riskLevel: 2,
+        maxDrawdown: "-8.5%",
+        maxDrawdownNum: 8.5,
+        primaryRisks: ["Aggressive Fed Rate Hikes (Duration)", "US Equity Drawdown"],
+        worstCase: "Rapid interest rate increases depress bond market prices (like 2022's aggregate bond dip).",
+        horizon: "1 – 3 Years",
+        horizonKey: "milestone",
+        expenseRatio: "0.03%",
+        cagrEst: "5.0% - 6.8%",
+        suitability: "Ultra-low 0.03% blended fee. 80% total US bond market dampens swings, 20% US total stock index drives compounding.",
+        allocations: [
+          { ticker: "BND", name: "Vanguard Total Bond Market ETF", pct: 80, assetClass: "Total US Bond", color: "#0ea5e9" },
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 20, assetClass: "Total US Stock", color: "#6366f1" }
+        ],
+        brokerages: ["Dime!", "Vanguard", "Fidelity", "Schwab"]
+      },
+      {
+        id: 9,
+        name: "Inflation-Shielded Goal Guard",
+        tagline: "Short TIPS and blue-chip dividend payers protecting purchasing power",
+        category: "Short Milestones (1-3Y)",
+        catKey: "milestone",
+        risk: "Moderate",
+        riskLevel: 2,
+        maxDrawdown: "-6.2%",
+        maxDrawdownNum: 6.2,
+        primaryRisks: ["Deflationary Shocks", "Dividend Equity Correction"],
+        worstCase: "If inflation drops below expectations, TIPS yield adjustments shrink while value stocks stall.",
+        horizon: "1 – 3 Years",
+        horizonKey: "milestone",
+        expenseRatio: "0.06%",
+        cagrEst: "5.3% - 7.0%",
+        suitability: "Short-term TIPS principal increases with CPI. Schwab's dividend ETF provides cashflow and dividend reinvestment boost.",
+        allocations: [
+          { ticker: "VTIP", name: "Vanguard Short-Term TIPS ETF", pct: 50, assetClass: "Inflation-Protected", color: "#14b8a6" },
+          { ticker: "SGOV", name: "iShares 0-3 Month Treasury Bond ETF", pct: 30, assetClass: "T-Bills", color: "#10b981" },
+          { ticker: "SCHD", name: "Schwab US Dividend Equity ETF", pct: 20, assetClass: "Dividend Growth", color: "#8b5cf6" }
+        ],
+        brokerages: ["Dime!", "Schwab", "Fidelity", "InnovestX"]
+      },
+      {
+        id: 10,
+        name: "The Multi-Asset Safety Cushion",
+        tagline: "4-asset all-weather buffer for stress-free 3-year milestone funding",
+        category: "Short Milestones (1-3Y)",
+        catKey: "milestone",
+        risk: "Moderate",
+        riskLevel: 2,
+        maxDrawdown: "-7.4%",
+        maxDrawdownNum: 7.4,
+        primaryRisks: ["Simultaneous Equity/Gold Pullback", "USD Depreciation vs THB"],
+        worstCase: "A strong dollar rally combined with market correction may cause gold and equities to dip at the same time.",
+        horizon: "1 – 3 Years",
+        horizonKey: "milestone",
+        expenseRatio: "0.08%",
+        cagrEst: "5.8% - 7.5%",
+        suitability: "Floating treasuries + core bonds + S&P 500 + physical gold creates an extraordinarily smooth return curve.",
+        allocations: [
+          { ticker: "USFR", name: "WisdomTree Floating Rate Treasury", pct: 40, assetClass: "Floating Treasury", color: "#059669" },
+          { ticker: "BND", name: "Vanguard Total Bond Market ETF", pct: 30, assetClass: "Total Bond", color: "#0ea5e9" },
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 15, assetClass: "US Large Cap", color: "#4f46e5" },
+          { ticker: "GLDM", name: "SPDR Gold MiniShares", pct: 15, assetClass: "Gold", color: "#f59e0b" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Interactive Brokers"]
+      },
+
+      // Bucket 3: Medium-Term Milestone Wealth (3-7 yrs)
+      {
+        id: 11,
+        name: "The First Home Down Payment Builder",
+        tagline: "40/60 stock/bond split targeting a house deposit in 4 to 6 years",
+        category: "Medium Wealth (3-7Y)",
+        catKey: "wealth",
+        risk: "Moderate",
+        riskLevel: 3,
+        maxDrawdown: "-14.2%",
+        maxDrawdownNum: 14.2,
+        primaryRisks: ["Equity Bear Market", "Intermediate Bond Duration Drag"],
+        worstCase: "A 2008 or 2020-style crash drops the 40% equity slice, taking 1-2 years to recover full down payment principal.",
+        horizon: "3 – 7 Years",
+        horizonKey: "medium",
+        expenseRatio: "0.04%",
+        cagrEst: "6.2% - 8.0%",
+        suitability: "Locks in 60% safe bond and Treasury yield while 40% S&P 500 expands the real estate deposit fund.",
+        allocations: [
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 40, assetClass: "US Equities", color: "#4f46e5" },
+          { ticker: "BND", name: "Vanguard Total Bond Market ETF", pct: 30, assetClass: "Total Bond", color: "#0ea5e9" },
+          { ticker: "VGIT", name: "Vanguard Intermediate Treasury ETF", pct: 20, assetClass: "Treasury Bonds", color: "#38bdf8" },
+          { ticker: "SGOV", name: "iShares 0-3 Month Treasury Bond ETF", pct: 10, assetClass: "T-Bills", color: "#10b981" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Vanguard", "Fidelity"]
+      },
+      {
+        id: 12,
+        name: "The Classic Balanced 60/40",
+        tagline: "The golden standard balanced portfolio for steady multi-year compounding",
+        category: "Medium Wealth (3-7Y)",
+        catKey: "wealth",
+        risk: "Moderate",
+        riskLevel: 3,
+        maxDrawdown: "-20.8%",
+        maxDrawdownNum: 20.8,
+        primaryRisks: ["Positive Stock/Bond Correlation (e.g., 2022)", "Macro Stagflation"],
+        worstCase: "In 2022, both stocks and bonds fell simultaneously when the Fed rapidly hiked rates, causing a temporary -16% drop.",
+        horizon: "3 – 7 Years",
+        horizonKey: "medium",
+        expenseRatio: "0.03%",
+        cagrEst: "7.0% - 9.0%",
+        suitability: "The benchmark used by endowment funds worldwide. 60% total stock market and 40% aggregate bonds.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 60, assetClass: "US Equities", color: "#4f46e5" },
+          { ticker: "BND", name: "Vanguard Total Bond Market ETF", pct: 40, assetClass: "US Bonds", color: "#0ea5e9" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Vanguard", "Fidelity"]
+      },
+      {
+        id: 13,
+        name: "The Global Balanced 60/40",
+        tagline: "Complete worldwide stock and currency-hedged bond diversification",
+        category: "Medium Wealth (3-7Y)",
+        catKey: "wealth",
+        risk: "Moderate",
+        riskLevel: 3,
+        maxDrawdown: "-21.5%",
+        maxDrawdownNum: 21.5,
+        primaryRisks: ["International Underperformance", "Global Currency Fluctuations"],
+        worstCase: "Foreign markets (Europe/Asia) lag US economic growth, causing international equities to drag return pace.",
+        horizon: "3 – 7 Years",
+        horizonKey: "medium",
+        expenseRatio: "0.05%",
+        cagrEst: "6.8% - 8.8%",
+        suitability: "Broadens the 60/40 to international equities and global bonds, eliminating single-country risk.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 40, assetClass: "US Equities", color: "#4f46e5" },
+          { ticker: "VXUS", name: "Vanguard Total International Stock ETF", pct: 20, assetClass: "International Equities", color: "#8b5cf6" },
+          { ticker: "BNDW", name: "Vanguard Total World Bond ETF", pct: 40, assetClass: "Global Bonds", color: "#0284c7" }
+        ],
+        brokerages: ["Dime!", "Vanguard", "Fidelity", "Interactive Brokers"]
+      },
+      {
+        id: 14,
+        name: "The MBA & Graduate School Warchest",
+        tagline: "Dividend stability and short treasuries to finance higher education",
+        category: "Medium Wealth (3-7Y)",
+        catKey: "wealth",
+        risk: "Moderate",
+        riskLevel: 3,
+        maxDrawdown: "-13.5%",
+        maxDrawdownNum: 13.5,
+        primaryRisks: ["Sequence of Returns Risk at Tuition Due Date"],
+        worstCase: "A market correction right when tuition is due forces selling some equities at a temporary loss if short paper runs out.",
+        horizon: "3 – 7 Years",
+        horizonKey: "medium",
+        expenseRatio: "0.05%",
+        cagrEst: "6.5% - 8.2%",
+        suitability: "For first jobbers planning to return to school for an MBA, MD, or Master's. 40% short paper protects tuition.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 35, assetClass: "Total US Stock", color: "#4f46e5" },
+          { ticker: "SCHD", name: "Schwab US Dividend Equity ETF", pct: 25, assetClass: "Dividend Growth", color: "#7c3aed" },
+          { ticker: "VGSH", name: "Vanguard Short-Term Treasury ETF", pct: 25, assetClass: "Short Bonds", color: "#0ea5e9" },
+          { ticker: "SGOV", name: "iShares 0-3 Month Treasury Bond ETF", pct: 15, assetClass: "Cash / T-Bills", color: "#10b981" }
+        ],
+        brokerages: ["Dime!", "Schwab", "Fidelity", "Vanguard"]
+      },
+      {
+        id: 15,
+        name: "The Entrepreneurial Runway (Side-Hustle Fund)",
+        tagline: "Half liquid startup cash, half high-beta tech for venture runway",
+        category: "Medium Wealth (3-7Y)",
+        catKey: "wealth",
+        risk: "Moderate",
+        riskLevel: 3,
+        maxDrawdown: "-16.0%",
+        maxDrawdownNum: 16.0,
+        primaryRisks: ["Tech Sector Valuation Multiple Compression"],
+        worstCase: "The 20% QQQM tech slice drops 30%, temporarily shaving 6% off the total side-hustle fund balance.",
+        horizon: "3 – 7 Years",
+        horizonKey: "medium",
+        expenseRatio: "0.08%",
+        cagrEst: "7.2% - 9.8%",
+        suitability: "Gives aspiring founders 50% guaranteed cash for leaving their job, while the other 50% compounds aggressively in VTI and Nasdaq.",
+        allocations: [
+          { ticker: "SGOV", name: "iShares 0-3 Month Treasury Bond ETF", pct: 50, assetClass: "T-Bills / Runway", color: "#10b981" },
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 30, assetClass: "US Broad Stock", color: "#4f46e5" },
+          { ticker: "QQQM", name: "Invesco NASDAQ 100 ETF", pct: 20, assetClass: "Tech Growth", color: "#ec4899" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Robinhood", "Fidelity"]
+      },
+      {
+        id: 16,
+        name: "The Golden Butterfly for Young Adults",
+        tagline: "5 equal 20% pillars for high returns with historically minuscule drawdowns",
+        category: "Medium Wealth (3-7Y)",
+        catKey: "wealth",
+        risk: "Moderate",
+        riskLevel: 3,
+        maxDrawdown: "-11.2%",
+        maxDrawdownNum: 11.2,
+        primaryRisks: ["Long Bond Sensitivity (TLT)", "Small-Cap Factor Drag"],
+        worstCase: "Long-term interest rates spike, hurting the 20% TLT sleeve; however, gold and equities historically absorb the shock.",
+        horizon: "3 – 7 Years",
+        horizonKey: "medium",
+        expenseRatio: "0.09%",
+        cagrEst: "7.5% - 9.5%",
+        suitability: "Created by Tyler at Portfolio Charts. 5 equal 20% pillars create remarkable stability across all economic regimes.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 20, assetClass: "Total US Stock", color: "#4f46e5" },
+          { ticker: "AVUV", name: "Avantis US Small Cap Value ETF", pct: 20, assetClass: "Small Cap Value", color: "#9333ea" },
+          { ticker: "TLT", name: "iShares 20+ Year Treasury Bond ETF", pct: 20, assetClass: "Long Treasury", color: "#0284c7" },
+          { ticker: "SHY", name: "iShares 1-3 Year Treasury Bond ETF", pct: 20, assetClass: "Short Treasury", color: "#38bdf8" },
+          { ticker: "GLDM", name: "SPDR Gold MiniShares", pct: 20, assetClass: "Physical Gold", color: "#f59e0b" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Interactive Brokers"]
+      },
+
+      // Bucket 4: Core Boglehead & Iconic Lazy Portfolios (7-20+ yrs)
+      {
+        id: 17,
+        name: "The Ultimate One-Fund Global Equity",
+        tagline: "Own 9,000+ companies across 45 countries in a single ETF ticker",
+        category: "Core Boglehead",
+        catKey: "lazy",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-33.8%",
+        maxDrawdownNum: 33.8,
+        primaryRisks: ["Global Macro Recession", "100% Equity Volatility"],
+        worstCase: "During global crises (like 2008 or March 2020), this drops 30-35% before recovering over subsequent years.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.07%",
+        cagrEst: "8.0% - 10.5%",
+        suitability: "Maximum simplicity. You buy 1 ticker (VT), and you literally own the entire world economy proportional to market capitalization.",
+        allocations: [{ ticker: "VT", name: "Vanguard Total World Stock ETF", pct: 100, assetClass: "Total World Equities", color: "#4f46e5" }],
+        brokerages: ["Dime!", "InnovestX", "Vanguard", "Fidelity"]
+      },
+      {
+        id: 18,
+        name: "The Warren Buffett 90/10 Rule",
+        tagline: "Buffett's official estate recommendation for non-professional investors",
+        category: "Core Boglehead",
+        catKey: "lazy",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-31.5%",
+        maxDrawdownNum: 31.5,
+        primaryRisks: ["US Large Cap Market Corrections", "Lack of International Hedge"],
+        worstCase: "A severe US recession drops the S&P 500 by ~35%, while the 10% T-Bill allocation preserves cash to DCA into bargains.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.03%",
+        cagrEst: "9.0% - 11.5%",
+        suitability: "From Buffett's 2013 Berkshire letter: 90% in very low-cost S&P 500 index fund, 10% in short-term government bonds.",
+        allocations: [
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 90, assetClass: "US Large Cap", color: "#4f46e5" },
+          { ticker: "SGOV", name: "iShares 0-3 Month Treasury Bond ETF", pct: 10, assetClass: "T-Bills / Cash", color: "#10b981" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Vanguard", "Fidelity"]
+      },
+      {
+        id: 19,
+        name: "The Iconic Bogleheads 3-Fund Core",
+        tagline: "Jack Bogle's celebrated gold standard for all-around wealth accumulation",
+        category: "Core Boglehead",
+        catKey: "lazy",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-29.0%",
+        maxDrawdownNum: 29.0,
+        primaryRisks: ["Broad Market Drawdown", "Bond Interest Rate Cycles"],
+        worstCase: "Suffers ~25-29% drop in severe equity bear markets, cushioned by the 15% BND position.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.04%",
+        cagrEst: "8.2% - 10.5%",
+        suitability: "The #1 recommended portfolio in personal finance history. Total US market, total international market, and total US bond market.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 60, assetClass: "US Equities", color: "#4f46e5" },
+          { ticker: "VXUS", name: "Vanguard Total International Stock ETF", pct: 25, assetClass: "Intl Equities", color: "#8b5cf6" },
+          { ticker: "BND", name: "Vanguard Total Bond Market ETF", pct: 15, assetClass: "US Bonds", color: "#0ea5e9" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Vanguard", "Fidelity"]
+      },
+      {
+        id: 20,
+        name: "The Aggressive Bogleheads 2-Fund",
+        tagline: "100% global equity indexing with zero bond drag for young earners",
+        category: "Core Boglehead",
+        catKey: "lazy",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-34.5%",
+        maxDrawdownNum: 34.5,
+        primaryRisks: ["Zero Bond Buffer", "Full Equity Market Drawdown"],
+        worstCase: "With zero bonds, this drops lock-step with world equity markets (-35% in rapid crises). Requires strong psychological discipline to hold and DCA.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.04%",
+        cagrEst: "8.8% - 11.5%",
+        suitability: "When you have 30+ working years ahead, bonds act as a performance drag. 80% US and 20% international captures pure equity growth.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 80, assetClass: "US Equities", color: "#4f46e5" },
+          { ticker: "VXUS", name: "Vanguard Total International Stock ETF", pct: 20, assetClass: "Intl Equities", color: "#8b5cf6" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Vanguard", "Fidelity"]
+      },
+      {
+        id: 21,
+        name: "The Classic 80/20 Young Accumulator",
+        tagline: "Heavy US stock engine with a 20% bond volatility cushion",
+        category: "Core Boglehead",
+        catKey: "lazy",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-27.0%",
+        maxDrawdownNum: 27.0,
+        primaryRisks: ["Equity Volatility", "Interest Rate Duration"],
+        worstCase: "Drops ~27% in extreme crashes, but the 20% BND allocation gives cash to rebalance into cheap stocks.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.03%",
+        cagrEst: "8.0% - 10.0%",
+        suitability: "Great for first jobbers who want an 80% growth throttle but also want a bond slice to rebalance into equities during downturns.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 80, assetClass: "US Equities", color: "#4f46e5" },
+          { ticker: "BND", name: "Vanguard Total Bond Market ETF", pct: 20, assetClass: "US Bonds", color: "#0ea5e9" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Vanguard", "Fidelity"]
+      },
+      {
+        id: 22,
+        name: "The Rick Ferri Core Four",
+        tagline: "Adds commercial real estate REITs to the classic 3-fund mix",
+        category: "Core Boglehead",
+        catKey: "lazy",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-32.0%",
+        maxDrawdownNum: 32.0,
+        primaryRisks: ["Commercial Real Estate Cycles", "General Equity Bear Market"],
+        worstCase: "REITs (VNQ) can suffer during interest rate hike cycles when commercial mortgage refinancing costs rise.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.05%",
+        cagrEst: "8.2% - 10.6%",
+        suitability: "Developed by veteran portfolio architect Rick Ferri. Dedicates an 8% slice to Vanguard Real Estate (VNQ) for inflation pass-through.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 48, assetClass: "US Equities", color: "#4f46e5" },
+          { ticker: "VXUS", name: "Vanguard Total International Stock ETF", pct: 24, assetClass: "Intl Equities", color: "#8b5cf6" },
+          { ticker: "BND", name: "Vanguard Total Bond Market ETF", pct: 20, assetClass: "US Bonds", color: "#0ea5e9" },
+          { ticker: "VNQ", name: "Vanguard Real Estate ETF", pct: 8, assetClass: "US REITs", color: "#f59e0b" }
+        ],
+        brokerages: ["Dime!", "Vanguard", "Fidelity", "Schwab"]
+      },
+      {
+        id: 23,
+        name: "The Bill Bernstein 'No-Brainer'",
+        tagline: "4 equal 25% engines: S&P 500, Small Value, International, and Bonds",
+        category: "Core Boglehead",
+        catKey: "lazy",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-26.5%",
+        maxDrawdownNum: 26.5,
+        primaryRisks: ["Small Cap Volatility", "International Currency Risk"],
+        worstCase: "Small-cap value can underperform mega-cap tech for several years during liquidity bubbles.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.07%",
+        cagrEst: "8.5% - 11.0%",
+        suitability: "Dr. William Bernstein's famous simplified multi-engine portfolio. Small-cap value (AVUV) provides historically documented size/value factor premia.",
+        allocations: [
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 25, assetClass: "US Large Cap", color: "#4f46e5" },
+          { ticker: "AVUV", name: "Avantis US Small Cap Value ETF", pct: 25, assetClass: "US Small Value", color: "#9333ea" },
+          { ticker: "VXUS", name: "Vanguard Total International Stock ETF", pct: 25, assetClass: "Intl Stock", color: "#8b5cf6" },
+          { ticker: "BND", name: "Vanguard Total Bond Market ETF", pct: 25, assetClass: "US Bonds", color: "#0ea5e9" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Vanguard"]
+      },
+      {
+        id: 24,
+        name: "The Target Retirement 2060 Synthetic",
+        tagline: "DIY replication of a target-date fund with lower fees and zero cash drag",
+        category: "Core Boglehead",
+        catKey: "lazy",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-32.5%",
+        maxDrawdownNum: 32.5,
+        primaryRisks: ["High 90% Global Equity Exposure", "International Growth Drag"],
+        worstCase: "Drops ~32% during recessions, exactly matching an institutional target-date retirement fund for young accumulators.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.05%",
+        cagrEst: "8.4% - 10.8%",
+        suitability: "Replicates Vanguard's Target Retirement 2060 fund using liquid ETFs for an ultra-low blended fee of 0.05% without mutual fund minimums.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 54, assetClass: "US Equities", color: "#4f46e5" },
+          { ticker: "VXUS", name: "Vanguard Total International Stock ETF", pct: 36, assetClass: "Intl Equities", color: "#8b5cf6" },
+          { ticker: "BND", name: "Vanguard Total Bond Market ETF", pct: 7, assetClass: "US Bonds", color: "#0ea5e9" },
+          { ticker: "BNDX", name: "Vanguard Total Intl Bond ETF", pct: 3, assetClass: "Intl Bonds", color: "#38bdf8" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Vanguard", "Fidelity"]
+      },
+      {
+        id: 25,
+        name: "The 'Coffeehouse' Portfolio for Beginners",
+        tagline: "Bill Schultheis' seven-slice equal discipline for peaceful compounding",
+        category: "Core Boglehead",
+        catKey: "lazy",
+        risk: "Moderate",
+        riskLevel: 3,
+        maxDrawdown: "-22.4%",
+        maxDrawdownNum: 22.4,
+        primaryRisks: ["Bond Yield Shifts", "Multi-Cap Value Divergence"],
+        worstCase: "40% fixed income ensures emotional peace; maximum drop in typical recessions is bounded near ~20%.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.04%",
+        cagrEst: "7.8% - 9.8%",
+        suitability: "40% fixed income ensures tranquility; 6 equal 10% equity slices (large, large-value, mid, small, real estate, international) capture every market corner.",
+        allocations: [
+          { ticker: "BND", name: "Vanguard Total Bond Market ETF", pct: 40, assetClass: "Total Bond", color: "#0ea5e9" },
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 10, assetClass: "Large Cap", color: "#4f46e5" },
+          { ticker: "VTV", name: "Vanguard Value ETF", pct: 10, assetClass: "Large Value", color: "#3b82f6" },
+          { ticker: "VO", name: "Vanguard Mid-Cap ETF", pct: 10, assetClass: "Mid Cap", color: "#06b6d4" },
+          { ticker: "VB", name: "Vanguard Small-Cap ETF", pct: 10, assetClass: "Small Cap", color: "#8b5cf6" },
+          { ticker: "VNQ", name: "Vanguard Real Estate ETF", pct: 10, assetClass: "REITs", color: "#f59e0b" },
+          { ticker: "VXUS", name: "Vanguard Total International ETF", pct: 10, assetClass: "Intl Equities", color: "#a855f7" }
+        ],
+        brokerages: ["Dime!", "Vanguard", "Fidelity", "Schwab"]
+      },
+
+      // Bucket 5: High-Growth & Aggressive Wealth Accumulation (FIRE 15-30 yrs)
+      {
+        id: 26,
+        name: "The 100% US Total Market Purist",
+        tagline: "Single-ticker mastery owning all 3,700+ public companies in America",
+        category: "FIRE & Growth",
+        catKey: "fire",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-35.0%",
+        maxDrawdownNum: 35.0,
+        primaryRisks: ["Zero Bond Buffer", "US Economic Cycle Downturns", "USD/THB FX Risk"],
+        worstCase: "In 2020 COVID crash, dropped -35% in 33 days. If you panic-sell at the bottom, you realize permanent loss.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.03%",
+        cagrEst: "9.5% - 12.0%",
+        suitability: "The JL Collins 'Simple Path to Wealth' pure strategy. Holds every public company in America with tiny 0.03% fee.",
+        allocations: [{ ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 100, assetClass: "Total US Equities", color: "#4f46e5" }],
+        brokerages: ["Dime!", "InnovestX", "SCB EASY", "Vanguard", "Fidelity"]
+      },
+      {
+        id: 27,
+        name: "The S&P 500 Heavyweight",
+        tagline: "Own America's top 500 economic powerhouses at 0.03% annual fee",
+        category: "FIRE & Growth",
+        catKey: "fire",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-34.0%",
+        maxDrawdownNum: 34.0,
+        primaryRisks: ["Mega-Cap Tech Concentration", "US Market Recessions"],
+        worstCase: "Top 7 companies make up over 30% of the index; if big-tech multiples compress, the whole S&P 500 drops.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.03%",
+        cagrEst: "9.8% - 12.2%",
+        suitability: "Focuses purely on large-cap profitable US leaders (Apple, Microsoft, Nvidia, Amazon, Alphabet, Berkshire).",
+        allocations: [{ ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 100, assetClass: "US Large Cap", color: "#4f46e5" }],
+        brokerages: ["Dime!", "InnovestX", "Vanguard", "Fidelity"]
+      },
+      {
+        id: 28,
+        name: "The 'Barbell' Hyper-Growth Core",
+        tagline: "70% S&P 500 bedrock turbo-charged with 30% Nasdaq-100 tech giants",
+        category: "FIRE & Growth",
+        catKey: "fire",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-38.2%",
+        maxDrawdownNum: 38.2,
+        primaryRisks: ["Tech Multiple De-rating", "High Growth Beta"],
+        worstCase: "In 2022's tech winter, QQQ dropped -33% and dragged this portfolio down ~25% in a single year.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.06%",
+        cagrEst: "11.0% - 14.0%",
+        suitability: "The most popular modern growth mix among millennial and Gen-Z tech professionals. Leverages secular tech innovation.",
+        allocations: [
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 70, assetClass: "US Large Cap", color: "#4f46e5" },
+          { ticker: "QQQM", name: "Invesco NASDAQ 100 ETF", pct: 30, assetClass: "Nasdaq-100 Tech", color: "#ec4899" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Robinhood", "Fidelity"]
+      },
+      {
+        id: 29,
+        name: "The Aggressive Global Triple-Threat",
+        tagline: "US broad market + Nasdaq tech turbo + Global international exposure",
+        category: "FIRE & Growth",
+        catKey: "fire",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-35.5%",
+        maxDrawdownNum: 35.5,
+        primaryRisks: ["Tech Multiple Pullback", "Foreign Currency Drag"],
+        worstCase: "Simultaneous weakness in high-multiple tech and international economic growth can produce steep drawdowns.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.06%",
+        cagrEst: "10.0% - 12.8%",
+        suitability: "Balanced high-octane growth. Keeps 20% abroad in VXUS, 30% in high-speed Nasdaq tech, and 50% in total US equities.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 50, assetClass: "US Equities", color: "#4f46e5" },
+          { ticker: "QQQM", name: "Invesco NASDAQ 100 ETF", pct: 30, assetClass: "Tech Growth", color: "#ec4899" },
+          { ticker: "VXUS", name: "Vanguard Total Intl Stock ETF", pct: 20, assetClass: "Intl Equities", color: "#8b5cf6" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Robinhood"]
+      },
+      {
+        id: 30,
+        name: "The Young FIRE Compounder",
+        tagline: "Barbell large-cap growth with academic small-cap value outperformance",
+        category: "FIRE & Growth",
+        catKey: "fire",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-37.0%",
+        maxDrawdownNum: 37.0,
+        primaryRisks: ["Small Cap Credit Squeeze", "Growth Valuation Deflation"],
+        worstCase: "Small caps (AVUV) can underperform when regional banks tighten credit during recessions.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.08%",
+        cagrEst: "10.5% - 13.5%",
+        suitability: "Pairs mega-cap growth momentum (SCHG) with Avantis small-cap value (AVUV) to exploit the two historical extremes of equity factor premiums.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 60, assetClass: "US Core Stock", color: "#4f46e5" },
+          { ticker: "SCHG", name: "Schwab US Large-Cap Growth ETF", pct: 20, assetClass: "Large Growth", color: "#ec4899" },
+          { ticker: "AVUV", name: "Avantis US Small Cap Value ETF", pct: 20, assetClass: "Small Value", color: "#9333ea" }
+        ],
+        brokerages: ["Dime!", "Schwab", "Fidelity", "Interactive Brokers"]
+      },
+      {
+        id: 31,
+        name: "The Tech Employee 50/50 DCA Starter",
+        tagline: "Equal 50/50 split between the S&P 500 and the Nasdaq-100",
+        category: "FIRE & Growth",
+        catKey: "fire",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-42.0%",
+        maxDrawdownNum: 42.0,
+        primaryRisks: ["High Tech Concentration (>55%)", "Interest Rate Sensitivity"],
+        worstCase: "In 2000-2002 Dotcom collapse, Nasdaq fell -80%. Today's QQQM holds profitable giants, but high P/E multiples still create sharp 30-40% drawdowns.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.08%",
+        cagrEst: "11.5% - 14.5%",
+        suitability: "High-conviction tech tilt. Overweights semiconductors, software, and AI cloud computing while retaining healthcare and financials.",
+        allocations: [
+          { ticker: "QQQM", name: "Invesco NASDAQ 100 ETF", pct: 50, assetClass: "Nasdaq-100", color: "#ec4899" },
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 50, assetClass: "S&P 500", color: "#4f46e5" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Robinhood", "Fidelity"]
+      },
+      {
+        id: 32,
+        name: "The All-Cap Growth Machine",
+        tagline: "Pure 100% growth style across large, mid, and small-cap spectrums",
+        category: "FIRE & Growth",
+        catKey: "fire",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-44.0%",
+        maxDrawdownNum: 44.0,
+        primaryRisks: ["Pure Growth Beta", "High Volatility Across Market Caps"],
+        worstCase: "Filters out value stocks completely. Suffers heavy drops when central banks raise discount rates on future earnings.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.06%",
+        cagrEst: "10.8% - 13.8%",
+        suitability: "Holds Schwab Large Growth with Vanguard Mid-Cap and Small-Cap Growth for full-throttle expansion phases.",
+        allocations: [
+          { ticker: "SCHG", name: "Schwab US Large-Cap Growth ETF", pct: 60, assetClass: "Large Growth", color: "#ec4899" },
+          { ticker: "VOT", name: "Vanguard Mid-Cap Growth ETF", pct: 20, assetClass: "Mid Growth", color: "#d946ef" },
+          { ticker: "VBK", name: "Vanguard Small-Cap Growth ETF", pct: 20, assetClass: "Small Growth", color: "#a855f7" }
+        ],
+        brokerages: ["Dime!", "Schwab", "Vanguard", "Fidelity"]
+      },
+      {
+        id: 33,
+        name: "The Mid-Cap Sweet Spot Tilt",
+        tagline: "Captures the historical 'Goldilocks' alpha of mid and small-cap firms",
+        category: "FIRE & Growth",
+        catKey: "fire",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-38.5%",
+        maxDrawdownNum: 38.5,
+        primaryRisks: ["Cyclical Mid-Cap Volatility", "Liquidity Tightening"],
+        worstCase: "Mid and small caps have higher beta than the S&P 500 during sharp market pullbacks.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.05%",
+        cagrEst: "10.2% - 13.0%",
+        suitability: "Historically, US mid-caps have generated higher risk-adjusted returns than large caps. This portfolio tilts 50% toward mid and small-cap S&P indexers.",
+        allocations: [
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 50, assetClass: "Large Cap", color: "#4f46e5" },
+          { ticker: "IJH", name: "iShares Core S&P Mid-Cap ETF", pct: 30, assetClass: "Mid Cap", color: "#06b6d4" },
+          { ticker: "IJR", name: "iShares Core S&P Small-Cap ETF", pct: 20, assetClass: "Small Cap", color: "#8b5cf6" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "InnovestX"]
+      },
+
+      // Bucket 6: Cash Flow, Dividend Compounding & Passive Income
+      {
+        id: 34,
+        name: "The 'SCHD & Chill' Starter Pack",
+        tagline: "Schwab's quality dividend growth powerhouse paired with S&P 500 compounding",
+        category: "Dividend & Cashflow",
+        catKey: "dividend",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-24.0%",
+        maxDrawdownNum: 24.0,
+        primaryRisks: ["Value Stock Underperformance vs Tech", "Dividend Cuts in Stagnant Firms"],
+        worstCase: "Can lag pure tech bull markets by 5-10% annually when high-growth tech leads rallies.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.05%",
+        cagrEst: "9.2% - 11.5%",
+        suitability: "Internet's favorite dividend combo. SCHD requires 10 years of dividend payouts and screens for return-on-equity, while VOO provides secular growth.",
+        allocations: [
+          { ticker: "SCHD", name: "Schwab US Dividend Equity ETF", pct: 70, assetClass: "Dividend Growth", color: "#8b5cf6" },
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 30, assetClass: "US Large Cap", color: "#4f46e5" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Schwab", "Fidelity"]
+      },
+      {
+        id: 35,
+        name: "The Dividend Growth Trifecta",
+        tagline: "3 distinct dividend screeners creating an airtight dividend moat",
+        category: "Dividend & Cashflow",
+        catKey: "dividend",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-23.5%",
+        maxDrawdownNum: 23.5,
+        primaryRisks: ["Financial Sector Weighting", "Rising Interest Rates on Dividend Yields"],
+        worstCase: "High Treasury bond yields make dividend yields less attractive on a relative basis, causing temporary capital stagnation.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.06%",
+        cagrEst: "8.8% - 11.2%",
+        suitability: "Blends SCHD (high quality yield), VIG (10+ years dividend increases), and DGRO (payout ratio < 75%) for balanced payout growth.",
+        allocations: [
+          { ticker: "SCHD", name: "Schwab US Dividend Equity ETF", pct: 40, assetClass: "High Quality Yield", color: "#8b5cf6" },
+          { ticker: "VIG", name: "Vanguard Dividend Appreciation ETF", pct: 30, assetClass: "Dividend Raisers", color: "#6366f1" },
+          { ticker: "DGRO", name: "iShares Core Dividend Growth ETF", pct: 30, assetClass: "Core Dividend", color: "#3b82f6" }
+        ],
+        brokerages: ["Dime!", "Schwab", "Vanguard", "Fidelity"]
+      },
+      {
+        id: 36,
+        name: "The Young Landlord (Passive Real Estate)",
+        tagline: "Commercial & residential REIT exposure with zero tenant phone calls",
+        category: "Dividend & Cashflow",
+        catKey: "dividend",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-36.0%",
+        maxDrawdownNum: 36.0,
+        primaryRisks: ["Interest Rate Spikes", "Commercial Real Estate Vacancies"],
+        worstCase: "High borrowing costs compress REIT margins, causing VNQ to drop ~35% during rapid central bank tightening cycles.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.07%",
+        cagrEst: "8.0% - 10.5%",
+        suitability: "Allows first jobbers to participate in real estate rental yields across data centers, industrial warehouses, and apartment complexes via VNQ.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 50, assetClass: "US Equities", color: "#4f46e5" },
+          { ticker: "VNQ", name: "Vanguard Real Estate ETF", pct: 35, assetClass: "US REITs", color: "#f59e0b" },
+          { ticker: "SCHD", name: "Schwab US Dividend Equity ETF", pct: 15, assetClass: "Dividend Growth", color: "#8b5cf6" }
+        ],
+        brokerages: ["Dime!", "Vanguard", "Fidelity", "Schwab"]
+      },
+      {
+        id: 37,
+        name: "The Monthly Cashflow Machine",
+        tagline: "Monthly dividend payouts engineered to offset monthly living expenses",
+        category: "Dividend & Cashflow",
+        catKey: "dividend",
+        risk: "Moderate",
+        riskLevel: 3,
+        maxDrawdown: "-19.5%",
+        maxDrawdownNum: 19.5,
+        primaryRisks: ["Capped Upside During Bull Runs (Covered Calls)", "NAV Erosion"],
+        worstCase: "JEPI's written call options cap your capital upside when the stock market skyrockets, trading growth for immediate cash yield.",
+        horizon: "3 – 7 Years",
+        horizonKey: "medium",
+        expenseRatio: "0.19%",
+        cagrEst: "7.5% - 9.8%",
+        suitability: "JEPI pays high monthly option-overlay income, Realty Income (O) pays monthly commercial rental dividends, and SCHD delivers quarterly dividend growth.",
+        allocations: [
+          { ticker: "JEPI", name: "JPMorgan Equity Premium Income ETF", pct: 40, assetClass: "Monthly Covered Call", color: "#10b981" },
+          { ticker: "SCHD", name: "Schwab US Dividend Equity ETF", pct: 30, assetClass: "Dividend Growth", color: "#8b5cf6" },
+          { ticker: "O", name: "Realty Income Corp (Monthly Dividend)", pct: 30, assetClass: "Monthly REIT", color: "#f59e0b" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Fidelity", "Schwab"]
+      },
+      {
+        id: 38,
+        name: "The Global Dividend Harvester",
+        tagline: "High dividend yields combined across North America, Europe, and Asia",
+        category: "Dividend & Cashflow",
+        catKey: "dividend",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-28.0%",
+        maxDrawdownNum: 28.0,
+        primaryRisks: ["International Currency Weakness", "Foreign Withholding Taxes"],
+        worstCase: "Foreign dividend yields can be subject to withholding taxes, and dollar surges depress foreign payout conversion.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.11%",
+        cagrEst: "7.8% - 10.0%",
+        suitability: "Pumps dividend yield from both US dividend growers (SCHD) and established dividend payers in Europe and Japan (VYMI).",
+        allocations: [
+          { ticker: "SCHD", name: "Schwab US Dividend Equity ETF", pct: 50, assetClass: "US Dividends", color: "#8b5cf6" },
+          { ticker: "VYMI", name: "Vanguard Intl High Dividend Yield ETF", pct: 30, assetClass: "Intl Dividends", color: "#06b6d4" },
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 20, assetClass: "Large Cap", color: "#4f46e5" }
+        ],
+        brokerages: ["Dime!", "Vanguard", "Schwab", "Fidelity"]
+      },
+      {
+        id: 39,
+        name: "The 'Dividend Aristocrat' Heritage",
+        tagline: "Strictly companies with 25+ consecutive years of increasing payouts",
+        category: "Dividend & Cashflow",
+        catKey: "dividend",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-26.0%",
+        maxDrawdownNum: 26.0,
+        primaryRisks: ["Mature Industry Slower Growth", "Higher Expense Ratio (0.35% for NOBL)"],
+        worstCase: "Aristocrats represent mature companies with lower R&D reinvestment, trailing dynamic tech companies during bull runs.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.22%",
+        cagrEst: "8.5% - 10.8%",
+        suitability: "NOBL holds only companies that raised dividends every single year through the Dotcom crash, 2008 GFC, and COVID.",
+        allocations: [
+          { ticker: "NOBL", name: "ProShares S&P 500 Dividend Aristocrats", pct: 60, assetClass: "Dividend Aristocrats", color: "#8b5cf6" },
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 40, assetClass: "S&P 500", color: "#4f46e5" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Interactive Brokers"]
+      },
+
+      // Bucket 7: Career Themes, Emerging Tech & Modern Mega-Trends
+      {
+        id: 40,
+        name: "The AI & Silicon Supercycle Pack",
+        tagline: "Hardware picks and shovels powering generative AI and robotics",
+        category: "Tech & Megatrends",
+        catKey: "thematic",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-46.5%",
+        maxDrawdownNum: 46.5,
+        primaryRisks: ["Semiconductor Cyclical Inventory Gluts", "Geopolitical Taiwan Risk (TSMC)"],
+        worstCase: "Semiconductors are historically cyclical. When AI hardware demand normalizes or inventory stacks up, SMH can drop -40% rapidly.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.14%",
+        cagrEst: "12.0% - 16.5%",
+        suitability: "Overweights Nvidia, TSMC, Broadcom, and ASML via SMH (30%) alongside Nasdaq-100 (20%) and S&P 500 (50%).",
+        allocations: [
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 50, assetClass: "Core Anchor", color: "#4f46e5" },
+          { ticker: "SMH", name: "VanEck Semiconductor ETF", pct: 30, assetClass: "Semiconductors / AI", color: "#06b6d4" },
+          { ticker: "QQQM", name: "Invesco NASDAQ 100 ETF", pct: 20, assetClass: "Tech Growth", color: "#ec4899" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Robinhood", "Fidelity"]
+      },
+      {
+        id: 41,
+        name: "The Software & Cloud Scaler",
+        tagline: "High-gross-margin recurring revenue software champions",
+        category: "Tech & Megatrends",
+        catKey: "thematic",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-41.0%",
+        maxDrawdownNum: 41.0,
+        primaryRisks: ["SaaS Enterprise IT Budget Cuts", "Valuation Multiple Compression"],
+        worstCase: "Enterprise IT spending cuts reduce corporate ARR expansion, triggering sharp valuation re-ratings.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.15%",
+        cagrEst: "11.5% - 15.0%",
+        suitability: "Holds enterprise SaaS giants (Microsoft, Salesforce, Adobe, ServiceNow, Palantir). Software gross margins of 75-80% deliver high compounding.",
+        allocations: [
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 50, assetClass: "Core US Anchor", color: "#4f46e5" },
+          { ticker: "IGV", name: "iShares Expanded Tech-Software ETF", pct: 30, assetClass: "Cloud & Software", color: "#6366f1" },
+          { ticker: "QQQM", name: "Invesco NASDAQ 100 ETF", pct: 20, assetClass: "Tech Growth", color: "#ec4899" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Robinhood"]
+      },
+      {
+        id: 42,
+        name: "The Clean Energy & Next-Gen Grid",
+        tagline: "Renewable generation, smart power grids, and electrical infrastructure",
+        category: "Tech & Megatrends",
+        catKey: "thematic",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-48.0%",
+        maxDrawdownNum: 48.0,
+        primaryRisks: ["Subsidies & Policy Shifts", "Capital Intensity in High-Rate Environments"],
+        worstCase: "Clean energy projects require heavy upfront debt financing. High interest rates delay project completions, hurting ICLN.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.22%",
+        cagrEst: "9.5% - 13.5%",
+        suitability: "AI datacenters require massive power. This combines Clean Energy (ICLN) and Smart Power Grid Infrastructure (GRID) with the S&P 500.",
+        allocations: [
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 50, assetClass: "Core US Anchor", color: "#4f46e5" },
+          { ticker: "ICLN", name: "iShares Global Clean Energy ETF", pct: 25, assetClass: "Clean Energy", color: "#10b981" },
+          { ticker: "GRID", name: "First Trust Clean Edge Smart Grid", pct: 25, assetClass: "Smart Grid Infrastructure", color: "#06b6d4" }
+        ],
+        brokerages: ["Dime!", "Robinhood", "Fidelity", "Schwab"]
+      },
+      {
+        id: 43,
+        name: "The Cybersecurity & Digital Defense Starter",
+        tagline: "Securing national infrastructure and digital data against cyber warfare",
+        category: "Tech & Megatrends",
+        catKey: "thematic",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-31.0%",
+        maxDrawdownNum: 31.0,
+        primaryRisks: ["Defense Contract Timing", "Tech Valuation Multiples"],
+        worstCase: "Cybersecurity companies face competitive disruption if single-platform suites squeeze standalone point solutions.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.18%",
+        cagrEst: "10.0% - 13.2%",
+        suitability: "Cybersecurity and defense spending are non-discretionary corporate and state budget items that grow regardless of economic recessions.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 60, assetClass: "US Broad Market", color: "#4f46e5" },
+          { ticker: "CIBR", name: "First Trust NASDAQ Cybersecurity ETF", pct: 25, assetClass: "Cybersecurity", color: "#3b82f6" },
+          { ticker: "ITA", name: "iShares US Aerospace & Defense ETF", pct: 15, assetClass: "Aerospace & Defense", color: "#64748b" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Robinhood"]
+      },
+      {
+        id: 44,
+        name: "The Healthcare & Biotech Horizon",
+        tagline: "Aging global demographic tailwinds plus breakthrough genomic therapies",
+        category: "Tech & Megatrends",
+        catKey: "thematic",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-32.5%",
+        maxDrawdownNum: 32.5,
+        primaryRisks: ["FDA Trial Failures (XBI)", "Drug Price Regulation Policy"],
+        worstCase: "Early-stage biotech (XBI) can experience multi-year drawdowns if clinical trials fail or financing runs dry.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.10%",
+        cagrEst: "9.0% - 12.5%",
+        suitability: "Combines defensive cashflow from pharma/medical devices (XLV) with speculative upside in clinical-stage biotech innovators (XBI).",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 60, assetClass: "US Core Stock", color: "#4f46e5" },
+          { ticker: "XLV", name: "Health Care Select Sector SPDR", pct: 25, assetClass: "Core Healthcare", color: "#06b6d4" },
+          { ticker: "XBI", name: "SPDR S&P Biotech ETF", pct: 15, assetClass: "Biotech Speculative", color: "#a855f7" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Robinhood"]
+      },
+      {
+        id: 45,
+        name: "The Modern 'Digital Gold & Tech' Frontier",
+        tagline: "Institutional Bitcoin ETF & gold hedge embedded within a tech growth core",
+        category: "Tech & Megatrends",
+        catKey: "thematic",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-42.0%",
+        maxDrawdownNum: 42.0,
+        primaryRisks: ["Crypto Market Volatility (-70% cycles)", "Regulatory Scrutiny"],
+        worstCase: "Bitcoin enters a crypto winter (-60% to -70% drop), which pulls 6-7% off the total portfolio value.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.09%",
+        cagrEst: "11.5% - 16.0%",
+        suitability: "Gives 10% exposure to spot Bitcoin via BlackRock's IBIT ETF alongside 5% physical gold and 85% equity indices.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 65, assetClass: "US Broad Stock", color: "#4f46e5" },
+          { ticker: "QQQM", name: "Invesco NASDAQ 100 ETF", pct: 20, assetClass: "Tech Growth", color: "#ec4899" },
+          { ticker: "IBIT", name: "iShares Bitcoin Trust ETF", pct: 10, assetClass: "Digital Asset (BTC)", color: "#f97316" },
+          { ticker: "GLDM", name: "SPDR Gold MiniShares", pct: 5, assetClass: "Physical Gold", color: "#f59e0b" }
+        ],
+        brokerages: ["Dime!", "Robinhood", "Fidelity", "Interactive Brokers"]
+      },
+      {
+        id: 46,
+        name: "The FinTech & Cashless Commerce Disruptor",
+        tagline: "Digital banking, transaction network processors, and payment rails",
+        category: "Tech & Megatrends",
+        catKey: "thematic",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-35.0%",
+        maxDrawdownNum: 35.0,
+        primaryRisks: ["Consumer Spending Slowdown", "FinTech Disintermediation"],
+        worstCase: "Recessions reduce global transaction volume, slowing revenue growth for payment processors.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.20%",
+        cagrEst: "9.8% - 13.0%",
+        suitability: "Visa, Mastercard, PayPal, and emerging payment infrastructure process trillions in global merchant volume annually.",
+        allocations: [
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 60, assetClass: "Large Cap Anchor", color: "#4f46e5" },
+          { ticker: "IPAY", name: "Amplify Mobile Payments ETF", pct: 25, assetClass: "FinTech & Payments", color: "#3b82f6" },
+          { ticker: "QQQM", name: "Invesco NASDAQ 100 ETF", pct: 15, assetClass: "Tech Growth", color: "#ec4899" }
+        ],
+        brokerages: ["Dime!", "Robinhood", "Fidelity", "Schwab"]
+      },
+
+      // Bucket 8: Factor Investing, Smart Beta & Asymmetric All-Weather
+      {
+        id: 47,
+        name: "The Academic 5-Factor Tilt (Avantis / Dimensional)",
+        tagline: "Evidence-based Fama-French factor tilts to capture small-cap value premia",
+        category: "Factor & All-Weather",
+        catKey: "factor",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-36.0%",
+        maxDrawdownNum: 36.0,
+        primaryRisks: ["Tracking Error Regret vs S&P 500", "Small Value Factor Drawdowns"],
+        worstCase: "During mega-cap tech mania, small-cap value can lag the headline S&P 500 for 3-5 years, testing investor patience.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.17%",
+        cagrEst: "10.0% - 13.5%",
+        suitability: "Based on Nobel laureate Eugene Fama's research showing cheap, highly profitable small companies outperform over decades.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 40, assetClass: "US Core Market", color: "#4f46e5" },
+          { ticker: "AVUV", name: "Avantis US Small Cap Value ETF", pct: 25, assetClass: "US Small Value", color: "#9333ea" },
+          { ticker: "AVDV", name: "Avantis Intl Small Cap Value ETF", pct: 20, assetClass: "Intl Small Value", color: "#c084fc" },
+          { ticker: "AVUS", name: "Avantis US Equity ETF", pct: 15, assetClass: "US Core Factor", color: "#6366f1" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Interactive Brokers"]
+      },
+      {
+        id: 48,
+        name: "The Quality + Momentum Heavyweight",
+        tagline: "High return-on-equity market leaders moving in powerful uptrends",
+        category: "Factor & All-Weather",
+        catKey: "factor",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-33.0%",
+        maxDrawdownNum: 33.0,
+        primaryRisks: ["Momentum Crashes (Sharp Trend Reversals)", "Sector Rotation Whipsaws"],
+        worstCase: "When market sentiment shifts abruptly (e.g. from tech to energy), momentum ETFs suffer sharp rebalancing lag.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.15%",
+        cagrEst: "10.2% - 13.2%",
+        suitability: "Quality screens for clean balance sheets and stable profits (QUAL), while Momentum rides strong 6-12 month price trends (MTUM).",
+        allocations: [
+          { ticker: "QUAL", name: "iShares MSCI USA Quality Factor ETF", pct: 50, assetClass: "Quality Factor", color: "#06b6d4" },
+          { ticker: "MTUM", name: "iShares MSCI USA Momentum Factor ETF", pct: 50, assetClass: "Momentum Factor", color: "#ec4899" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Robinhood"]
+      },
+      {
+        id: 49,
+        name: "The Ray Dalio 'All Seasons' for New Earners",
+        tagline: "Risk parity allocation engineered to thrive through inflation and recession",
+        category: "Factor & All-Weather",
+        catKey: "factor",
+        risk: "Moderate",
+        riskLevel: 3,
+        maxDrawdown: "-13.5%",
+        maxDrawdownNum: 13.5,
+        primaryRisks: ["Long-Term Bond Sensitivity (TLT)", "Lagging Equity Bull Markets"],
+        worstCase: "In strong bull markets, this returns 7-8% while pure equity does 25%; in bad years, it barely budges.",
+        horizon: "3 – 7 Years",
+        horizonKey: "medium",
+        expenseRatio: "0.19%",
+        cagrEst: "6.8% - 8.8%",
+        suitability: "Ray Dalio's Bridgewater strategy for retail investors. Spreads risk equally across economic growth, inflation, and deflation.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 30, assetClass: "US Equities", color: "#4f46e5" },
+          { ticker: "TLT", name: "iShares 20+ Year Treasury Bond ETF", pct: 40, assetClass: "Long Treasuries", color: "#0284c7" },
+          { ticker: "IEI", name: "iShares 3-7 Year Treasury Bond ETF", pct: 15, assetClass: "Intermediate Bonds", color: "#38bdf8" },
+          { ticker: "GLDM", name: "SPDR Gold MiniShares", pct: 7.5, assetClass: "Gold", color: "#f59e0b" },
+          { ticker: "DBC", name: "Invesco DB Commodity Index ETF", pct: 7.5, assetClass: "Commodities", color: "#e11d48" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Robinhood"]
+      },
+      {
+        id: 50,
+        name: "The Swensen Yale Endowment Retail Model",
+        tagline: "David Swensen's institutional multi-asset model adapted for young accumulators",
+        category: "Factor & All-Weather",
+        catKey: "factor",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-24.5%",
+        maxDrawdownNum: 24.5,
+        primaryRisks: ["Emerging Market Volatility (VWO)", "REIT Debt Sensitivity"],
+        worstCase: "Emerging market equities and real estate can decline together during global credit contractions.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.06%",
+        cagrEst: "8.0% - 10.4%",
+        suitability: "Pioneered by the legendary Yale CIO. Divides capital into non-correlated equity, real estate, inflation protection, and Treasuries.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 30, assetClass: "US Stocks", color: "#4f46e5" },
+          { ticker: "VNQ", name: "Vanguard Real Estate ETF", pct: 20, assetClass: "Real Estate", color: "#f59e0b" },
+          { ticker: "VXUS", name: "Vanguard Total International ETF", pct: 15, assetClass: "Foreign Stocks", color: "#8b5cf6" },
+          { ticker: "TIP", name: "iShares TIPS Bond ETF", pct: 15, assetClass: "TIPS Inflation", color: "#14b8a6" },
+          { ticker: "VWO", name: "Vanguard Emerging Markets ETF", pct: 10, assetClass: "Emerging Equities", color: "#ec4899" },
+          { ticker: "BND", name: "Vanguard Total Bond Market ETF", pct: 10, assetClass: "Core US Bonds", color: "#0ea5e9" }
+        ],
+        brokerages: ["Dime!", "Vanguard", "Fidelity", "Schwab"]
+      },
+
+      // Bucket 9: Low Volatility & Sleep-Well-At-Night (SWAN) (New #51-#54)
+      {
+        id: 51,
+        name: "The Minimum Volatility Large-Cap Shield",
+        tagline: "Screens for lowest historical beta companies paired with US aggregate bonds",
+        category: "Low-Vol SWAN",
+        catKey: "swan",
+        risk: "Moderate",
+        riskLevel: 3,
+        maxDrawdown: "-16.5%",
+        maxDrawdownNum: 16.5,
+        primaryRisks: ["Underperforming Tech Rallies", "Duration Risk in Bonds"],
+        worstCase: "Lags the S&P 500 when high-beta tech surges, but protects significantly during market drops.",
+        horizon: "3 – 7 Years",
+        horizonKey: "medium",
+        expenseRatio: "0.09%",
+        cagrEst: "7.4% - 9.2%",
+        suitability: "USMV mathematically optimizes holdings to produce the lowest possible portfolio volatility.",
+        allocations: [
+          { ticker: "USMV", name: "iShares MSCI USA Min Vol Factor ETF", pct: 60, assetClass: "Min Vol Equity", color: "#06b6d4" },
+          { ticker: "BND", name: "Vanguard Total Bond Market ETF", pct: 40, assetClass: "Total Bond", color: "#0ea5e9" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Vanguard"]
+      },
+      {
+        id: 52,
+        name: "The Low-Beta High-Dividend Anchor",
+        tagline: "Combines strict low-volatility S&P stocks with quality dividend growth and cash",
+        category: "Low-Vol SWAN",
+        catKey: "swan",
+        risk: "Moderate",
+        riskLevel: 3,
+        maxDrawdown: "-14.8%",
+        maxDrawdownNum: 14.8,
+        primaryRisks: ["Interest Rate Compression on Utilities/Financials"],
+        worstCase: "Low-beta utilities and consumer staples decline if bond yields spike to new highs.",
+        horizon: "3 – 7 Years",
+        horizonKey: "medium",
+        expenseRatio: "0.11%",
+        cagrEst: "7.0% - 9.0%",
+        suitability: "Holds the 100 least-volatile stocks in the S&P 500 (SPLV) with SCHD and T-Bills for calm compounding.",
+        allocations: [
+          { ticker: "SPLV", name: "Invesco S&P 500 Low Volatility ETF", pct: 50, assetClass: "Low Vol S&P", color: "#06b6d4" },
+          { ticker: "SCHD", name: "Schwab US Dividend Equity ETF", pct: 30, assetClass: "Dividend Growth", color: "#8b5cf6" },
+          { ticker: "SGOV", name: "iShares 0-3 Month Treasury Bond ETF", pct: 20, assetClass: "Cash / T-Bills", color: "#10b981" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Interactive Brokers"]
+      },
+      {
+        id: 53,
+        name: "The Global Minimum Volatility World",
+        tagline: "Worldwide low-volatility equity diversification cushioned by global bonds",
+        category: "Low-Vol SWAN",
+        catKey: "swan",
+        risk: "Moderate",
+        riskLevel: 3,
+        maxDrawdown: "-17.2%",
+        maxDrawdownNum: 17.2,
+        primaryRisks: ["Foreign Currency Exposure", "International Growth Drag"],
+        worstCase: "Global equities lag if US markets sprint ahead, but cushions local macroeconomic shocks.",
+        horizon: "5 – 10 Years",
+        horizonKey: "long",
+        expenseRatio: "0.15%",
+        cagrEst: "7.2% - 9.1%",
+        suitability: "Holds ACWV (iShares MSCI Global Min Vol) with BNDW to eliminate country-specific volatility.",
+        allocations: [
+          { ticker: "ACWV", name: "iShares MSCI Global Min Vol ETF", pct: 70, assetClass: "Global Min Vol", color: "#6366f1" },
+          { ticker: "BNDW", name: "Vanguard Total World Bond ETF", pct: 30, assetClass: "Global Bonds", color: "#0284c7" }
+        ],
+        brokerages: ["Dime!", "Vanguard", "Fidelity", "Interactive Brokers"]
+      },
+      {
+        id: 54,
+        name: "The Recession-Resistant Pure Defensive",
+        tagline: "Consumer staples and low-volatility equities with short government bonds",
+        category: "Low-Vol SWAN",
+        catKey: "swan",
+        risk: "Conservative",
+        riskLevel: 2,
+        maxDrawdown: "-9.8%",
+        maxDrawdownNum: 9.8,
+        primaryRisks: ["Underperforming Growth Eras", "Inflation Input Costs on Staples"],
+        worstCase: "Toothpaste, food, and soap companies (XLP) maintain earnings in recessions, but have limited growth in booms.",
+        horizon: "1 – 3 Years",
+        horizonKey: "milestone",
+        expenseRatio: "0.10%",
+        cagrEst: "6.0% - 7.8%",
+        suitability: "Ultra-defensive equity strategy for investors who cannot tolerate large portfolio drawdowns.",
+        allocations: [
+          { ticker: "USMV", name: "iShares MSCI USA Min Vol Factor ETF", pct: 40, assetClass: "Min Vol Equity", color: "#06b6d4" },
+          { ticker: "XLP", name: "Consumer Staples Select Sector SPDR", pct: 30, assetClass: "Consumer Staples", color: "#f59e0b" },
+          { ticker: "VGSH", name: "Vanguard Short-Term Treasury ETF", pct: 30, assetClass: "Short Treasuries", color: "#38bdf8" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "InnovestX"]
+      },
+
+      // Bucket 10: Shariah / Halal Compliant Global Portfolios (New #55-#58)
+      {
+        id: 55,
+        name: "The Islamic Global Equity Core",
+        tagline: "100% Shariah-screened equities filtered for zero conventional debt or interest",
+        category: "Shariah / Halal",
+        catKey: "halal",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-32.0%",
+        maxDrawdownNum: 32.0,
+        primaryRisks: ["Sector Exclusion (Zero Financials/Banks)", "High Tech Weighting"],
+        worstCase: "Excluding banks and interest-bearing firms naturally overweights technology, increasing tech beta.",
+        horizon: "10+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.55%",
+        cagrEst: "10.0% - 13.0%",
+        suitability: "Certified Shariah compliant by reputable Islamic scholars. Screened for clean balance sheets and zero prohibited business.",
+        allocations: [
+          { ticker: "SPUS", name: "SP Funds S&P 500 Sharia Industry ETF", pct: 70, assetClass: "US Sharia Equity", color: "#10b981" },
+          { ticker: "UMMA", name: "Wahed Dow Jones Islamic World ETF", pct: 30, assetClass: "Intl Sharia Equity", color: "#06b6d4" }
+        ],
+        brokerages: ["Dime!", "Interactive Brokers", "Fidelity", "Schwab"]
+      },
+      {
+        id: 56,
+        name: "The Halal Boglehead 3-Fund Alternative",
+        tagline: "Shariah US stock, International Islamic equity, and Islamic Sukuk bonds",
+        category: "Shariah / Halal",
+        catKey: "halal",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-25.5%",
+        maxDrawdownNum: 25.5,
+        primaryRisks: ["Sukuk Liquidity", "Tech Sector Weight"],
+        worstCase: "SPSK (Sukuk) provides Islamic bond alternatives; however, Sukuk trading volume is smaller than US Treasuries.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.58%",
+        cagrEst: "8.5% - 11.2%",
+        suitability: "Replaces traditional interest-bearing bonds with SPSK Sukuk (asset-backed Islamic bonds) and equities with SPUS/UMMA.",
+        allocations: [
+          { ticker: "SPUS", name: "SP Funds S&P 500 Sharia Industry ETF", pct: 60, assetClass: "US Sharia Equity", color: "#10b981" },
+          { ticker: "UMMA", name: "Wahed Dow Jones Islamic World ETF", pct: 25, assetClass: "Intl Sharia Equity", color: "#06b6d4" },
+          { ticker: "SPSK", name: "SP Funds Dow Jones Global Sukuk ETF", pct: 15, assetClass: "Islamic Sukuk Bonds", color: "#38bdf8" }
+        ],
+        brokerages: ["Dime!", "Interactive Brokers", "Fidelity", "Schwab"]
+      },
+      {
+        id: 57,
+        name: "The Shariah Tech & Gold Compounder",
+        tagline: "Halal large growth companies paired with physical gold tail-risk buffer",
+        category: "Shariah / Halal",
+        catKey: "halal",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-33.5%",
+        maxDrawdownNum: 33.5,
+        primaryRisks: ["Tech Multiple De-rating", "Gold Cycle Drops"],
+        worstCase: "Tech selloffs trigger ~30% drawdowns, moderated slightly by the 10% physical gold holding.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.52%",
+        cagrEst: "10.5% - 13.8%",
+        suitability: "Combines SPUS with HLAL (Wahed FTSE USA Shariah) and GLDM for young Muslim investors seeking maximum halal wealth accumulation.",
+        allocations: [
+          { ticker: "SPUS", name: "SP Funds S&P 500 Sharia Industry ETF", pct: 60, assetClass: "US Sharia Large Cap", color: "#10b981" },
+          { ticker: "HLAL", name: "Wahed FTSE USA Shariah ETF", pct: 30, assetClass: "Halal US Equities", color: "#059669" },
+          { ticker: "GLDM", name: "SPDR Gold MiniShares", pct: 10, assetClass: "Physical Gold", color: "#f59e0b" }
+        ],
+        brokerages: ["Dime!", "Interactive Brokers", "Fidelity", "Robinhood"]
+      },
+      {
+        id: 58,
+        name: "The Halal Conservative Capital Preserver",
+        tagline: "High Sukuk bond allocation with Shariah equities and gold for milestone safety",
+        category: "Shariah / Halal",
+        catKey: "halal",
+        risk: "Moderate",
+        riskLevel: 2,
+        maxDrawdown: "-11.5%",
+        maxDrawdownNum: 11.5,
+        primaryRisks: ["Sukuk Duration Risk", "Currency Risk"],
+        worstCase: "Drawdowns are tightly bounded due to 50% Sukuk fixed income, providing peace of mind.",
+        horizon: "2 – 5 Years",
+        horizonKey: "milestone",
+        expenseRatio: "0.48%",
+        cagrEst: "6.0% - 7.8%",
+        suitability: "Designed for young Muslim professionals saving for marriage, haj/umrah, or home down payment without taking riba (usury).",
+        allocations: [
+          { ticker: "SPSK", name: "SP Funds Dow Jones Global Sukuk ETF", pct: 50, assetClass: "Islamic Sukuk Bonds", color: "#38bdf8" },
+          { ticker: "SPUS", name: "SP Funds S&P 500 Sharia Industry ETF", pct: 30, assetClass: "US Sharia Large Cap", color: "#10b981" },
+          { ticker: "GLDM", name: "SPDR Gold MiniShares", pct: 20, assetClass: "Physical Gold", color: "#f59e0b" }
+        ],
+        brokerages: ["Dime!", "Interactive Brokers", "Schwab"]
+      },
+
+      // Bucket 11: Anti-Concentration & Equal-Weight (New #59-#62)
+      {
+        id: 59,
+        name: "The S&P 500 Equal-Weight Anti-Concentration",
+        tagline: "Gives all 500 US companies equal 0.2% weighting, eliminating Big Tech drag",
+        category: "Equal-Weight Core",
+        catKey: "equal",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-36.5%",
+        maxDrawdownNum: 36.5,
+        primaryRisks: ["Underperforming Mega-Cap Tech Rallies", "Higher Portfolio Turnover"],
+        worstCase: "When Nvidia, Apple, and Microsoft drive the entire market rally, equal-weight RSP trails market-cap VOO.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.20%",
+        cagrEst: "9.2% - 11.8%",
+        suitability: "Invesco S&P 500 Equal Weight (RSP) rebalances quarterly, selling high-flying winners to buy undervalued dips.",
+        allocations: [{ ticker: "RSP", name: "Invesco S&P 500 Equal Weight ETF", pct: 100, assetClass: "Equal-Weight Large Cap", color: "#3b82f6" }],
+        brokerages: ["Dime!", "InnovestX", "Fidelity", "Schwab"]
+      },
+      {
+        id: 60,
+        name: "The Equal-Weight Barbell",
+        tagline: "50% Equal-Weight S&P 500 + 50% Equal-Weight Nasdaq-100",
+        category: "Equal-Weight Core",
+        catKey: "equal",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-38.0%",
+        maxDrawdownNum: 38.0,
+        primaryRisks: ["Higher Rebalancing Drag", "Broader Tech Mid-Cap Swings"],
+        worstCase: "More volatile than standard S&P 500 during widespread economic recessions due to higher mid-cap representation.",
+        horizon: "10+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.20%",
+        cagrEst: "10.0% - 12.8%",
+        suitability: "Protects you from bubble concentration in the top 5 mega-caps while preserving exposure to all top 100 tech firms.",
+        allocations: [
+          { ticker: "RSP", name: "Invesco S&P 500 Equal Weight ETF", pct: 50, assetClass: "Equal-Weight S&P", color: "#3b82f6" },
+          { ticker: "QQQE", name: "Direxion NASDAQ-100 Equal Weight ETF", pct: 50, assetClass: "Equal-Weight Nasdaq", color: "#ec4899" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Interactive Brokers"]
+      },
+      {
+        id: 61,
+        name: "The Mid & Small Cap Pure Value Engine",
+        tagline: "Eliminates large-cap index drag by focusing purely on discounted profitable firms",
+        category: "Equal-Weight Core",
+        catKey: "equal",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-41.0%",
+        maxDrawdownNum: 41.0,
+        primaryRisks: ["Liquidity Cycle Volatility", "Multi-year Factor Stagnation"],
+        worstCase: "Small companies can struggle during credit crunches when debt refinancing costs rise.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.28%",
+        cagrEst: "10.5% - 14.0%",
+        suitability: "Splits capital between domestic US small value (AVUV) and international small value (AVDV).",
+        allocations: [
+          { ticker: "AVUV", name: "Avantis US Small Cap Value ETF", pct: 50, assetClass: "US Small Value", color: "#9333ea" },
+          { ticker: "AVDV", name: "Avantis Intl Small Cap Value ETF", pct: 50, assetClass: "Intl Small Value", color: "#c084fc" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Interactive Brokers"]
+      },
+      {
+        id: 62,
+        name: "The Broad Market Anti-Bubble Core",
+        tagline: "40% Equal-weight S&P with 30% small-cap value and 30% bond dampener",
+        category: "Equal-Weight Core",
+        catKey: "equal",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-24.0%",
+        maxDrawdownNum: 24.0,
+        primaryRisks: ["Underperforming Momentum Rallies"],
+        worstCase: "Protects against mega-cap valuation collapses, but lags when popular tech names double.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.16%",
+        cagrEst: "8.5% - 10.8%",
+        suitability: "Ideal for first jobbers worried that modern market-cap weighted index funds have become too concentrated in tech.",
+        allocations: [
+          { ticker: "RSP", name: "Invesco S&P 500 Equal Weight ETF", pct: 40, assetClass: "Equal-Weight S&P", color: "#3b82f6" },
+          { ticker: "AVUV", name: "Avantis US Small Cap Value ETF", pct: 30, assetClass: "Small Value", color: "#9333ea" },
+          { ticker: "BND", name: "Vanguard Total Bond Market ETF", pct: 30, assetClass: "US Bonds", color: "#0ea5e9" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Vanguard"]
+      },
+
+      // Bucket 12: High-Yield Covered Call Cashflow (New #63-#66)
+      {
+        id: 63,
+        name: "The Tech Covered Call High Cashflow",
+        tagline: "Nasdaq option-overlay premium income yielding 9-11% annualized monthly cash",
+        category: "Covered Call Yield",
+        catKey: "options",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-22.5%",
+        maxDrawdownNum: 22.5,
+        primaryRisks: ["Capped Upside During Tech Rallies", "Option Premium Fluctuation"],
+        worstCase: "When Nasdaq surges 40% in a year, JEPQ only captures ~18-20% due to covered call option write caps.",
+        horizon: "5 – 10 Years",
+        horizonKey: "long",
+        expenseRatio: "0.22%",
+        cagrEst: "8.5% - 11.0%",
+        suitability: "JPMorgan Nasdaq Equity Premium Income (JEPQ) sells out-of-the-money call options, turning volatility into monthly cash dividends.",
+        allocations: [
+          { ticker: "JEPQ", name: "JPMorgan Nasdaq Equity Premium Income", pct: 50, assetClass: "Nasdaq Covered Call", color: "#10b981" },
+          { ticker: "JEPI", name: "JPMorgan Equity Premium Income ETF", pct: 30, assetClass: "S&P Covered Call", color: "#059669" },
+          { ticker: "SCHD", name: "Schwab US Dividend Equity ETF", pct: 20, assetClass: "Dividend Growth", color: "#8b5cf6" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Fidelity", "Schwab"]
+      },
+      {
+        id: 64,
+        name: "The S&P 500 High-Yield Income Engine",
+        tagline: "NEOS SPYI tax-efficient options income paired 50/50 with pure VOO growth",
+        category: "Covered Call Yield",
+        catKey: "options",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-26.0%",
+        maxDrawdownNum: 26.0,
+        primaryRisks: ["Partial Capped Upside", "NAV Sensitivity to Bear Markets"],
+        worstCase: "Downside participation in crashes is nearly equal to the S&P 500, but cushioned slightly by option premiums received.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.35%",
+        cagrEst: "9.0% - 11.5%",
+        suitability: "SPYI uses Section 1256 index options for tax efficiency, giving monthly cashflow without sacrificing all capital appreciation.",
+        allocations: [
+          { ticker: "SPYI", name: "NEOS S&P 500 High Income ETF", pct: 50, assetClass: "High Income Options", color: "#10b981" },
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 50, assetClass: "S&P 500 Growth", color: "#4f46e5" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Interactive Brokers"]
+      },
+      {
+        id: 65,
+        name: "The High-Yield Monthly Expense Eraser",
+        tagline: "Engineered to produce high monthly dividend checks to cover daily bills",
+        category: "Covered Call Yield",
+        catKey: "options",
+        risk: "Moderate",
+        riskLevel: 3,
+        maxDrawdown: "-21.0%",
+        maxDrawdownNum: 21.0,
+        primaryRisks: ["Lower Total Long-Term Capital Growth", "Real Estate Commercial Cycles"],
+        worstCase: "Delivers maximum monthly cashflow, but grows principal slower than pure index funds over 20 years.",
+        horizon: "3 – 7 Years",
+        horizonKey: "medium",
+        expenseRatio: "0.28%",
+        cagrEst: "7.8% - 9.8%",
+        suitability: "Combines JEPQ (Nasdaq covered call), JEPI (S&P covered call), and Realty Income (monthly tenant leases) for direct living cost subsidies.",
+        allocations: [
+          { ticker: "JEPQ", name: "JPMorgan Nasdaq Equity Premium Income", pct: 40, assetClass: "Tech Monthly Income", color: "#10b981" },
+          { ticker: "JEPI", name: "JPMorgan Equity Premium Income ETF", pct: 30, assetClass: "Core Monthly Income", color: "#059669" },
+          { ticker: "O", name: "Realty Income Corp (Monthly Dividend)", pct: 30, assetClass: "Monthly REIT", color: "#f59e0b" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Fidelity", "Schwab"]
+      },
+      {
+        id: 66,
+        name: "The Covered Call + Pure Growth Barbell",
+        tagline: "50% high monthly cash distribution + 50% unconstrained tech acceleration",
+        category: "Covered Call Yield",
+        catKey: "options",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-32.5%",
+        maxDrawdownNum: 32.5,
+        primaryRisks: ["Tech Sector Concentration", "High Volatility"],
+        worstCase: "If tech crashes, both halves drop; however, JEPQ's 10% monthly distribution provides instant cash to reinvest.",
+        horizon: "10+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.25%",
+        cagrEst: "10.5% - 13.5%",
+        suitability: "Gives you immediate cashflow to spend or reinvest while QQQM provides unlimited upside.",
+        allocations: [
+          { ticker: "JEPQ", name: "JPMorgan Nasdaq Equity Premium Income", pct: 50, assetClass: "Tech Covered Call", color: "#10b981" },
+          { ticker: "QQQM", name: "Invesco NASDAQ 100 ETF", pct: 50, assetClass: "Pure Tech Growth", color: "#ec4899" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Robinhood", "Fidelity"]
+      },
+
+      // Bucket 13: Emerging Markets & Asia-Pacific Tilt (New #67-#70)
+      {
+        id: 67,
+        name: "The India Tiger Economy Surge",
+        tagline: "Combines the US S&P 500 foundation with the world's fastest growing major economy",
+        category: "Emerging Asia & India",
+        catKey: "asia",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-37.0%",
+        maxDrawdownNum: 37.0,
+        primaryRisks: ["Indian Rupee (INR) Currency Depreciation", "Emerging Market Volatility"],
+        worstCase: "Emerging markets can experience sudden political or currency selloffs, making INDA swing wildly.",
+        horizon: "10+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.28%",
+        cagrEst: "10.5% - 13.8%",
+        suitability: "India has favorable demographics, massive digital infrastructure, and GDP growth exceeding 6.5%.",
+        allocations: [
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 60, assetClass: "US Large Cap", color: "#4f46e5" },
+          { ticker: "INDA", name: "iShares MSCI India ETF", pct: 40, assetClass: "India Equities", color: "#f97316" }
+        ],
+        brokerages: ["Dime!", "Interactive Brokers", "Fidelity", "Schwab"]
+      },
+      {
+        id: 68,
+        name: "The Emerging Asia Supercharger",
+        tagline: "Total US stock market combined with top 50 Asian semiconductor & tech giants",
+        category: "Emerging Asia & India",
+        catKey: "asia",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-38.5%",
+        maxDrawdownNum: 38.5,
+        primaryRisks: ["Geopolitical Tensions in East Asia", "FX Swings vs USD & THB"],
+        worstCase: "Trade tensions or regional conflicts can disrupt Asian tech leaders (TSMC, Samsung, Tencent).",
+        horizon: "10+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.26%",
+        cagrEst: "10.0% - 13.2%",
+        suitability: "AIA holds the 50 largest companies in Asia. Pairs the American engine with Asian manufacturing dominance.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 50, assetClass: "US Equities", color: "#4f46e5" },
+          { ticker: "AIA", name: "iShares Asia 50 ETF", pct: 30, assetClass: "Asia Megacaps", color: "#06b6d4" },
+          { ticker: "INDA", name: "iShares MSCI India ETF", pct: 20, assetClass: "India Equities", color: "#f97316" }
+        ],
+        brokerages: ["Dime!", "Interactive Brokers", "Schwab", "Fidelity"]
+      },
+      {
+        id: 69,
+        name: "The Broad Emerging Markets Value",
+        tagline: "60% US core stock + 40% worldwide emerging markets across Latin America, Asia, and EMEA",
+        category: "Emerging Asia & India",
+        catKey: "asia",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-39.0%",
+        maxDrawdownNum: 39.0,
+        primaryRisks: ["Strong US Dollar Cycle", "Emerging Market Sovereign Debt Risk"],
+        worstCase: "A strong dollar attracts capital back to the US, causing emerging market equities to lag for extended periods.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.05%",
+        cagrEst: "9.0% - 12.0%",
+        suitability: "VWO holds over 5,000 emerging market stocks at a microscopic 0.08% expense ratio.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 60, assetClass: "US Core Stock", color: "#4f46e5" },
+          { ticker: "VWO", name: "Vanguard Emerging Markets ETF", pct: 40, assetClass: "Emerging Markets", color: "#ec4899" }
+        ],
+        brokerages: ["Dime!", "InnovestX", "Vanguard", "Fidelity"]
+      },
+      {
+        id: 70,
+        name: "The East-West Global Balance",
+        tagline: "Balanced exposure across US, Developed Europe/Japan, India, and Emerging Markets",
+        category: "Emerging Asia & India",
+        catKey: "asia",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-32.5%",
+        maxDrawdownNum: 32.5,
+        primaryRisks: ["Multi-Currency Volatility", "Uneven Regional Economic Growth"],
+        worstCase: "Global growth desynchronization causes some regions to stall while others advance.",
+        horizon: "10+ Years",
+        horizonKey: "long",
+        expenseRatio: "0.11%",
+        cagrEst: "8.8% - 11.5%",
+        suitability: "Ensures your portfolio is not solely dependent on Western economies, capturing Asian GDP expansion.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 40, assetClass: "US Equities", color: "#4f46e5" },
+          { ticker: "VXUS", name: "Vanguard Total International ETF", pct: 30, assetClass: "Developed Intl", color: "#8b5cf6" },
+          { ticker: "INDA", name: "iShares MSCI India ETF", pct: 20, assetClass: "India Growth", color: "#f97316" },
+          { ticker: "VWO", name: "Vanguard Emerging Markets ETF", pct: 10, assetClass: "Emerging Markets", color: "#ec4899" }
+        ],
+        brokerages: ["Dime!", "Interactive Brokers", "Fidelity", "Vanguard"]
+      },
+
+      // Bucket 14: Capital Efficient & Multi-Asset Web3 (New #71-#75)
+      {
+        id: 71,
+        name: "The WisdomTree 90/60 Capital Efficient Core",
+        tagline: "Stacking $90 of equities and $60 of bond futures on every $100 invested",
+        category: "Crypto & Capital Efficient",
+        catKey: "frontier",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-24.0%",
+        maxDrawdownNum: 24.0,
+        primaryRisks: ["Treasury Futures Borrowing Cost", "Stagflationary Drawdowns"],
+        worstCase: "NTSX uses cash collateral to hold bond futures. If cash yields spike higher than bond yields, leverage drag occurs.",
+        horizon: "7 – 15 Years",
+        horizonKey: "long",
+        expenseRatio: "0.20%",
+        cagrEst: "9.5% - 12.5%",
+        suitability: "NTSX provides 150% asset exposure without taking on margin debt, delivering higher returns with balanced 60/40 volatility.",
+        allocations: [{ ticker: "NTSX", name: "WisdomTree US Efficient Core ETF", pct: 100, assetClass: "90/60 Capital Efficient", color: "#059669" }],
+        brokerages: ["Dime!", "Interactive Brokers", "Fidelity", "Schwab"]
+      },
+      {
+        id: 72,
+        name: "The Young Aggressive 2x Leveraged S&P DCA",
+        tagline: "30% 2x Leveraged S&P 500 (SSO) alongside 70% standard VOO for long-run DCA",
+        category: "Crypto & Capital Efficient",
+        catKey: "frontier",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-48.0%",
+        maxDrawdownNum: 48.0,
+        primaryRisks: ["Daily Leveraged Compounding Decay", "Severe Bear Market Volatility"],
+        worstCase: "In choppy sideways or declining markets, leveraged ETFs experience volatility decay. Requires continuous monthly DCA.",
+        horizon: "15+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.28%",
+        cagrEst: "11.5% - 15.5%",
+        suitability: "Based on lifecycle investing theories (Ayres & Nalebuff). Young earners with 30 years ahead can exploit mild leverage through systematic DCA.",
+        allocations: [
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 70, assetClass: "Core S&P 500", color: "#4f46e5" },
+          { ticker: "SSO", name: "ProShares Ultra S&P 500 (2x)", pct: 30, assetClass: "2x Leveraged S&P", color: "#f43f5e" }
+        ],
+        brokerages: ["Dime!", "Robinhood", "Fidelity", "Interactive Brokers"]
+      },
+      {
+        id: 73,
+        name: "The Dual Digital Asset Frontier",
+        tagline: "Regulated spot Bitcoin (IBIT) and Ethereum (ETHA) with tech growth core",
+        category: "Crypto & Capital Efficient",
+        catKey: "frontier",
+        risk: "Aggressive",
+        riskLevel: 5,
+        maxDrawdown: "-45.0%",
+        maxDrawdownNum: 45.0,
+        primaryRisks: ["Crypto Asset Extreme Volatility", "Smart Contract / Blockchain Risks"],
+        worstCase: "A 70% crypto bear market shaves 14% off the portfolio value, requiring high conviction to hold.",
+        horizon: "10+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.12%",
+        cagrEst: "12.0% - 17.5%",
+        suitability: "Holds BlackRock's spot Bitcoin ETF (12%) and Ethereum ETF (8%) in a safe brokerage account alongside core broad equities.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 60, assetClass: "US Core Stock", color: "#4f46e5" },
+          { ticker: "QQQM", name: "Invesco NASDAQ 100 ETF", pct: 20, assetClass: "Tech Growth", color: "#ec4899" },
+          { ticker: "IBIT", name: "iShares Bitcoin Trust ETF", pct: 12, assetClass: "Spot Bitcoin", color: "#f97316" },
+          { ticker: "ETHA", name: "iShares Ethereum Trust ETF", pct: 8, assetClass: "Spot Ethereum", color: "#6366f1" }
+        ],
+        brokerages: ["Dime!", "Robinhood", "Fidelity", "Interactive Brokers"]
+      },
+      {
+        id: 74,
+        name: "The Barbell Digital Gold & Hard Money",
+        tagline: "50% S&P 500 + 30% safe cash + 10% Bitcoin + 10% Physical Gold",
+        category: "Crypto & Capital Efficient",
+        catKey: "frontier",
+        risk: "Moderate",
+        riskLevel: 3,
+        maxDrawdown: "-18.5%",
+        maxDrawdownNum: 18.5,
+        primaryRisks: ["Monetary Policy & Currency Fluctuations"],
+        worstCase: "Bitcoin volatility is countered by the 30% T-Bill cushion and 10% gold, keeping overall drawdowns relatively modest.",
+        horizon: "5 – 10 Years",
+        horizonKey: "long",
+        expenseRatio: "0.08%",
+        cagrEst: "8.8% - 11.5%",
+        suitability: "Antifragile barbell portfolio. Combines high liquidity (SGOV), classical hard money (Gold), and digital scarce money (BTC).",
+        allocations: [
+          { ticker: "VOO", name: "Vanguard S&P 500 ETF", pct: 50, assetClass: "S&P 500", color: "#4f46e5" },
+          { ticker: "SGOV", name: "iShares 0-3 Month Treasury Bond ETF", pct: 30, assetClass: "Cash / T-Bills", color: "#10b981" },
+          { ticker: "IBIT", name: "iShares Bitcoin Trust ETF", pct: 10, assetClass: "Bitcoin", color: "#f97316" },
+          { ticker: "GLDM", name: "SPDR Gold MiniShares", pct: 10, assetClass: "Physical Gold", color: "#f59e0b" }
+        ],
+        brokerages: ["Dime!", "Robinhood", "Fidelity", "Interactive Brokers"]
+      },
+      {
+        id: 75,
+        name: "The Ultimate All-Asset Omni-Compounder",
+        tagline: "The complete multi-engine vehicle: US Core, Tech, Small Value, Bonds, Gold & BTC",
+        category: "Crypto & Capital Efficient",
+        catKey: "frontier",
+        risk: "Growth",
+        riskLevel: 4,
+        maxDrawdown: "-26.5%",
+        maxDrawdownNum: 26.5,
+        primaryRisks: ["Complex Multi-Asset Tracking", "Annual Rebalancing Discipline"],
+        worstCase: "Drawdowns are well cushioned by 6 non-correlated return engines, rarely exceeding ~25% even in major crises.",
+        horizon: "10+ Years",
+        horizonKey: "fire",
+        expenseRatio: "0.11%",
+        cagrEst: "9.8% - 13.0%",
+        suitability: "The all-in-one masterpiece for young earners. Captures every major asset class, academic factor, and technological frontier in single digits.",
+        allocations: [
+          { ticker: "VTI", name: "Vanguard Total Stock Market ETF", pct: 40, assetClass: "US Core Market", color: "#4f46e5" },
+          { ticker: "QQQM", name: "Invesco NASDAQ 100 ETF", pct: 20, assetClass: "Tech Growth", color: "#ec4899" },
+          { ticker: "AVUV", name: "Avantis US Small Cap Value ETF", pct: 15, assetClass: "Small Value", color: "#9333ea" },
+          { ticker: "BND", name: "Vanguard Total Bond Market ETF", pct: 10, assetClass: "US Bonds", color: "#0ea5e9" },
+          { ticker: "GLDM", name: "SPDR Gold MiniShares", pct: 10, assetClass: "Gold Hedge", color: "#f59e0b" },
+          { ticker: "IBIT", name: "iShares Bitcoin Trust ETF", pct: 5, assetClass: "Digital Asset", color: "#f97316" }
+        ],
+        brokerages: ["Dime!", "Fidelity", "Schwab", "Interactive Brokers"]
+      }
+    ];
+
+    // --- STATE MANAGEMENT ---
+    let currentCategory = 'all';
+    let currentSearch = '';
+    let currentRisk = 'all';
+    let currentDrawdown = 'all';
+    let currentSort = 'id-asc';
+    let activeModalPortfolio = null;
+    let comparedPortfolioIds = [];
+    let dcaRate = 10.0;
+
+    // --- INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', () => {
+      renderPortfolios();
+      updateDcaCalculations();
+      lucide.createIcons();
+      // Auto-sync live Google Finance USD/THB rate silently on startup
+      syncGoogleFinanceRate(true);
+    });
+
+    // --- CURRENCY TOGGLE LOGIC ---
+    function setCurrency(curr) {
+      activeCurrency = curr;
+      const thbBtn = document.getElementById('currThbBtn');
+      const usdBtn = document.getElementById('currUsdBtn');
+      const dcaIndicator = document.getElementById('dcaCurrIndicator');
+      const monthlySlider = document.getElementById('dcaMonthlySlider');
+      const initialSlider = document.getElementById('dcaInitialSlider');
+      const monthlyTicks = document.getElementById('dcaMonthlyTicks');
+
+      if (curr === 'THB') {
+        thbBtn.classList.add('bg-emerald-600', 'text-white');
+        thbBtn.classList.remove('text-slate-400');
+        usdBtn.classList.remove('bg-emerald-600', 'text-white');
+        usdBtn.classList.add('text-slate-400');
+        dcaIndicator.innerText = "Calculated in THB (฿)";
+
+        // Set THB slider bounds
+        monthlySlider.min = 1000;
+        monthlySlider.max = 50000;
+        monthlySlider.step = 500;
+        monthlySlider.value = 5000;
+
+        initialSlider.min = 0;
+        initialSlider.max = 500000;
+        initialSlider.step = 5000;
+        initialSlider.value = 20000;
+
+        monthlyTicks.innerHTML = `
+          <span>฿1,000</span>
+          <span>฿10,000</span>
+          <span>฿25,000</span>
+          <span>฿50,000</span>
+        `;
+        showToast("Switched currency to Thai Baht (฿)");
+      } else {
+        usdBtn.classList.add('bg-emerald-600', 'text-white');
+        usdBtn.classList.remove('text-slate-400');
+        thbBtn.classList.remove('bg-emerald-600', 'text-white');
+        thbBtn.classList.add('text-slate-400');
+        dcaIndicator.innerText = "Calculated in USD ($)";
+
+        // Set USD slider bounds
+        monthlySlider.min = 50;
+        monthlySlider.max = 2500;
+        monthlySlider.step = 50;
+        monthlySlider.value = 250;
+
+        initialSlider.min = 0;
+        initialSlider.max = 25000;
+        initialSlider.step = 500;
+        initialSlider.value = 1000;
+
+        monthlyTicks.innerHTML = `
+          <span>$50</span>
+          <span>$500</span>
+          <span>$1,200</span>
+          <span>$2,500</span>
+        `;
+        showToast("Switched currency to US Dollar ($)");
+      }
+
+      updateDcaCalculations();
+      renderPortfolios();
+    }
+
+    function formatMoney(amount) {
+      if (activeCurrency === 'THB') {
+        return `฿${Math.round(amount).toLocaleString()}`;
+      } else {
+        return `$${Math.round(amount).toLocaleString()}`;
+      }
+    }
+
+    // --- CONFIGURABLE FX ENGINE & GOOGLE FINANCE SYNC ---
+    function onFxChange(newRate) {
+      const parsed = parseFloat(newRate);
+      if (isNaN(parsed) || parsed <= 0) return;
+      usdThbRate = Math.round(parsed * 100) / 100;
+
+      // Sync Top Header input
+      const headerInput = document.getElementById('headerFxInput');
+      if (headerInput && parseFloat(headerInput.value) !== usdThbRate) {
+        headerInput.value = usdThbRate.toFixed(2);
+      }
+
+      // Sync DCA modal slider & label
+      const dcaSlider = document.getElementById('dcaFxSlider');
+      if (dcaSlider && parseFloat(dcaSlider.value) !== usdThbRate) {
+        dcaSlider.value = usdThbRate;
+      }
+      const dcaFxLabel = document.getElementById('dcaFxRateLabel');
+      if (dcaFxLabel) {
+        dcaFxLabel.innerText = `฿${usdThbRate.toFixed(2)}`;
+      }
+
+      // Sync active FX banner in hero
+      const activeBanner = document.getElementById('activeFxBanner');
+      if (activeBanner) {
+        activeBanner.innerText = `1 USD = ฿${usdThbRate.toFixed(2)}`;
+      }
+
+      // Update status tag
+      const statusTag = document.getElementById('fxSyncStatus');
+      if (statusTag && !isSyncingFx) {
+        statusTag.innerText = `(User Configured: ฿${usdThbRate.toFixed(2)})`;
+      }
+
+      updateDcaCalculations();
+      lucide.createIcons();
+      showToast(`Exchange rate set: 1 USD = ฿${usdThbRate.toFixed(2)}`);
+    }
+
+    async function syncGoogleFinanceRate(silent = false) {
+      if (isSyncingFx) return;
+      isSyncingFx = true;
+
+      const syncIcons = [document.getElementById('syncIcon'), document.getElementById('dcaSyncIcon')];
+      syncIcons.forEach(icon => {
+        if (icon) icon.classList.add('animate-spin');
+      });
+
+      const statusTag = document.getElementById('fxSyncStatus');
+      if (statusTag && !silent) {
+        statusTag.innerText = "(Fetching live Google Finance quote...)";
+      }
+
+      try {
+        // Fetch real-time FX feed matching Google Finance USD-THB quote
+        const response = await fetch('https://open.er-api.com/v6/latest/USD');
+        if (!response.ok) throw new Error("HTTP error " + response.status);
+        const data = await response.json();
+        if (data && data.rates && data.rates.THB) {
+          const liveThb = Math.round(data.rates.THB * 100) / 100;
+          usdThbRate = liveThb;
+
+          const headerInput = document.getElementById('headerFxInput');
+          if (headerInput) headerInput.value = usdThbRate.toFixed(2);
+
+          const dcaSlider = document.getElementById('dcaFxSlider');
+          if (dcaSlider) dcaSlider.value = usdThbRate;
+
+          const dcaFxLabel = document.getElementById('dcaFxRateLabel');
+          if (dcaFxLabel) dcaFxLabel.innerText = `฿${usdThbRate.toFixed(2)}`;
+
+          const activeBanner = document.getElementById('activeFxBanner');
+          if (activeBanner) activeBanner.innerText = `1 USD = ฿${usdThbRate.toFixed(2)}`;
+
+          if (statusTag) {
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            statusTag.innerText = `(Live Google Finance: ${timeStr})`;
+          }
+
+          updateDcaCalculations();
+          if (!silent) {
+            showToast(`Synced with Google Finance: 1 USD = ฿${usdThbRate.toFixed(2)}`);
+          }
+        } else {
+          throw new Error("Invalid rate payload");
+        }
+      } catch (err) {
+        console.warn("Live FX fetch failed or offline, falling back to 35.50 default:", err);
+        if (statusTag) {
+          statusTag.innerText = `(Offline fallback: ฿${usdThbRate.toFixed(2)})`;
+        }
+        if (!silent) {
+          showToast(`Using default rate: 1 USD = ฿${usdThbRate.toFixed(2)} (offline/network error)`);
+        }
+      } finally {
+        isSyncingFx = false;
+        syncIcons.forEach(icon => {
+          if (icon) icon.classList.remove('animate-spin');
+        });
+      }
+    }
+
+    // --- DARK MODE TOGGLE ---
+    function toggleDarkMode() {
+      const html = document.documentElement;
+      html.classList.toggle('dark');
+      lucide.createIcons();
+    }
+
+    // --- FILTER & SEARCH LOGIC ---
+    function filterCategory(catKey) {
+      currentCategory = catKey;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        if (btn.dataset.cat === catKey) {
+          btn.classList.add('bg-emerald-600', 'text-white');
+          btn.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+        } else {
+          btn.classList.remove('bg-emerald-600', 'text-white');
+          btn.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+        }
+      });
+      renderPortfolios();
+    }
+
+    function handleSearch() {
+      const input = document.getElementById('searchInput');
+      currentSearch = input.value.trim().toLowerCase();
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (currentSearch.length > 0) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+      renderPortfolios();
+    }
+
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      currentSearch = '';
+      document.getElementById('clearSearchBtn').classList.add('hidden');
+      renderPortfolios();
+    }
+
+    function applyFilters() {
+      currentRisk = document.getElementById('riskSelect').value;
+      currentDrawdown = document.getElementById('drawdownSelect').value;
+      currentSort = document.getElementById('sortSelect').value;
+      renderPortfolios();
+    }
+
+    function resetAllFilters() {
+      currentCategory = 'all';
+      currentSearch = '';
+      currentRisk = 'all';
+      currentDrawdown = 'all';
+      currentSort = 'id-asc';
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearSearchBtn').classList.add('hidden');
+      document.getElementById('riskSelect').value = 'all';
+      document.getElementById('drawdownSelect').value = 'all';
+      document.getElementById('sortSelect').value = 'id-asc';
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        if (btn.dataset.cat === 'all') {
+          btn.classList.add('bg-emerald-600', 'text-white');
+          btn.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+        } else {
+          btn.classList.remove('bg-emerald-600', 'text-white');
+          btn.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+        }
+      });
+      renderPortfolios();
+    }
+
+    function getFilteredList() {
+      return PORTFOLIOS.filter(p => {
+        // Category filter
+        if (currentCategory !== 'all' && p.catKey !== currentCategory) return false;
+        // Risk filter
+        if (currentRisk !== 'all' && p.risk !== currentRisk) return false;
+        // Drawdown filter
+        if (currentDrawdown === 'low' && p.maxDrawdownNum >= 15) return false;
+        if (currentDrawdown === 'med' && (p.maxDrawdownNum < 15 || p.maxDrawdownNum > 30)) return false;
+        if (currentDrawdown === 'high' && p.maxDrawdownNum <= 30) return false;
+        // Search filter
+        if (currentSearch) {
+          const matchName = p.name.toLowerCase().includes(currentSearch);
+          const matchTagline = p.tagline.toLowerCase().includes(currentSearch);
+          const matchCat = p.category.toLowerCase().includes(currentSearch);
+          const matchRisks = p.primaryRisks.some(r => r.toLowerCase().includes(currentSearch));
+          const matchTickers = p.allocations.some(a => a.ticker.toLowerCase().includes(currentSearch) || a.name.toLowerCase().includes(currentSearch));
+          if (!matchName && !matchTagline && !matchCat && !matchRisks && !matchTickers) return false;
+        }
+        return true;
+      }).sort((a, b) => {
+        if (currentSort === 'id-asc') return a.id - b.id;
+        if (currentSort === 'fee-asc') return parseFloat(a.expenseRatio) - parseFloat(b.expenseRatio);
+        if (currentSort === 'drawdown-asc') return a.maxDrawdownNum - b.maxDrawdownNum;
+        if (currentSort === 'risk-asc') return a.riskLevel - b.riskLevel;
+        if (currentSort === 'risk-desc') return b.riskLevel - a.riskLevel;
+        return 0;
+      });
+    }
+
+    // --- RENDER PORTFOLIOS GRID ---
+    function renderPortfolios() {
+      const grid = document.getElementById('portfolioGrid');
+      const empty = document.getElementById('emptyState');
+      const filtered = getFilteredList();
+
+      document.getElementById('portfolioCount').innerText = filtered.length;
+      document.getElementById('filterSubtext').innerText = (filtered.length !== PORTFOLIOS.length) ? `(filtered from ${PORTFOLIOS.length} total)` : '';
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      grid.innerHTML = filtered.map(p => {
+        const isCompared = comparedPortfolioIds.includes(p.id);
+        const riskColor = getRiskColor(p.risk);
+
+        // Tickers pills string
+        const tickerPills = p.allocations.map(a => `
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">
+            <span class="w-2 h-2 rounded-full" style="background-color: ${a.color}"></span>
+            <span>${a.ticker}</span>
+            <span class="text-slate-400 font-normal">${a.pct}%</span>
+          </span>
+        `).join('');
+
+        // Allocation Bar Segments
+        const barSegments = p.allocations.map(a => `
+          <div class="h-full relative group/bar transition-all" style="width: ${a.pct}%; background-color: ${a.color}" title="${a.ticker}: ${a.pct}% (${a.name})"></div>
+        `).join('');
+
+        return `
+          <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 p-5 shadow-sm hover:shadow-md hover:border-emerald-500/50 transition duration-200 flex flex-col justify-between group">
+            
+            <!-- Card Top Info -->
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                  #${String(p.id).padStart(2, '0')}
+                </span>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-900/50" title="Historical Max Drawdown">
+                    Drop: ${p.maxDrawdown}
+                  </span>
+                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full ${riskColor}">
+                    ${p.risk}
+                  </span>
+                </div>
+              </div>
+
+              <h3 class="font-display font-bold text-slate-900 dark:text-white text-base leading-snug group-hover:text-emerald-500 transition">
+                ${p.name}
+              </h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                ${p.tagline}
+              </p>
+
+              <!-- Proportional Allocation Bar -->
+              <div class="mt-4">
+                <div class="w-full h-2.5 rounded-full overflow-hidden flex bg-slate-100 dark:bg-slate-800">
+                  ${barSegments}
+                </div>
+              </div>
+
+              <!-- Tickers Tag List -->
+              <div class="mt-3 flex flex-wrap gap-1.5">
+                ${tickerPills}
+              </div>
+            </div>
+
+            <!-- Card Bottom Metrics & Actions -->
+            <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+              <div class="grid grid-cols-3 gap-2 text-[11px] mb-4">
+                <div>
+                  <span class="text-slate-400 block text-[10px]">Fee (ER)</span>
+                  <span class="font-bold text-slate-800 dark:text-slate-200">${p.expenseRatio}</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 block text-[10px]">Est. CAGR</span>
+                  <span class="font-bold text-emerald-600 dark:text-emerald-400">${p.cagrEst.split('-')[0].trim()}+</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 block text-[10px]">Max Drop</span>
+                  <span class="font-bold text-rose-600 dark:text-rose-400">${p.maxDrawdown}</span>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-1.5">
+                <button onclick="openDetailModal(${p.id})" class="flex-1 py-2 px-2 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 font-semibold text-xs rounded-xl border border-emerald-200 dark:border-emerald-800/60 transition flex items-center justify-center gap-1" title="Inspect holdings and risk breakdown">
+                  <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                  <span>Inspect</span>
+                </button>
+                <button onclick="openDcaForPortfolio(${p.id})" class="py-2 px-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl shadow-sm transition flex items-center justify-center gap-1" title="Simulate salary DCA compounding for this portfolio">
+                  <i data-lucide="calculator" class="w-3.5 h-3.5"></i>
+                  <span>DCA</span>
+                </button>
+                <button onclick="toggleCompare(${p.id})" class="py-2 px-2.5 ${isCompared ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'} font-semibold text-xs rounded-xl border border-slate-200 dark:border-slate-700 transition flex items-center justify-center" title="${isCompared ? 'Remove from comparison' : 'Add to comparison'}">
+                  <i data-lucide="${isCompared ? 'check' : 'scale'}" class="w-3.5 h-3.5"></i>
+                </button>
+                <button onclick="copyPortfolioDirect(${p.id})" class="py-2 px-2 bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 rounded-xl border border-slate-200 dark:border-slate-700 transition" title="Copy Tickers">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function getRiskColor(risk) {
+      switch (risk) {
+        case 'Conservative': return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800';
+        case 'Moderate': return 'bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300 border border-sky-300 dark:border-sky-800';
+        case 'Growth': return 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-300 dark:border-indigo-800';
+        case 'Aggressive': return 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-800';
+        default: return 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300';
+      }
+    }
+
+    // --- DEEP DIVE MODAL ---
+    function openDetailModal(id) {
+      const p = PORTFOLIOS.find(x => x.id === id);
+      if (!p) return;
+      activeModalPortfolio = p;
+
+      document.getElementById('modalIdPill').innerText = `#${String(p.id).padStart(2, '0')}`;
+      document.getElementById('modalCategoryBadge').innerText = p.category;
+      document.getElementById('modalRiskBadge').innerText = p.risk;
+      document.getElementById('modalRiskBadge').className = `text-xs px-2 py-0.5 rounded font-medium ${getRiskColor(p.risk)}`;
+      document.getElementById('modalTitle').innerText = p.name;
+      document.getElementById('modalTagline').innerText = p.tagline;
+
+      document.getElementById('modalFee').innerText = p.expenseRatio;
+      document.getElementById('modalCagr').innerText = p.cagrEst;
+      document.getElementById('modalDrawdown').innerText = p.maxDrawdown;
+      document.getElementById('modalHorizon').innerText = p.horizon;
+      document.getElementById('modalSuitability').innerText = p.suitability;
+      document.getElementById('modalWorstCase').innerText = p.worstCase;
+
+      // Risk Tags
+      const riskTagsContainer = document.getElementById('modalRiskTags');
+      riskTagsContainer.innerHTML = p.primaryRisks.map(r => `
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-800">
+          ⚠️ ${r}
+        </span>
+      `).join('');
+
+      // Holdings Table
+      const tableBody = document.getElementById('modalAllocationTable');
+      tableBody.innerHTML = p.allocations.map(a => `
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+          <td class="p-3 font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${a.color}"></span>
+            ${a.ticker}
+          </td>
+          <td class="p-3 text-slate-600 dark:text-slate-300">${a.name}</td>
+          <td class="p-3 text-slate-500">${a.assetClass}</td>
+          <td class="p-3 text-right font-extrabold text-emerald-600 dark:text-emerald-400">${a.pct}%</td>
+        </tr>
+      `).join('');
+
+      // Brokerage Badges
+      const brokerContainer = document.getElementById('modalBrokerList');
+      brokerContainer.innerHTML = p.brokerages.map(b => `
+        <span class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold border border-slate-200 dark:border-slate-700">
+          ${b}
+        </span>
+      `).join('');
+
+      // Update Compare button state in modal
+      const isComp = comparedPortfolioIds.includes(p.id);
+      const compBtn = document.getElementById('modalCompareToggleBtn');
+      compBtn.innerHTML = isComp 
+        ? `<i data-lucide="check" class="w-3.5 h-3.5"></i><span>In Comparison</span>`
+        : `<i data-lucide="plus-circle" class="w-3.5 h-3.5"></i><span>Add to Compare</span>`;
+
+      document.getElementById('detailModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detailModal').classList.add('hidden');
+      activeModalPortfolio = null;
+    }
+
+    function copyModalPortfolio() {
+      if (!activeModalPortfolio) return;
+      copyPortfolioDirect(activeModalPortfolio.id);
+    }
+
+    function toggleCompareCurrentModal() {
+      if (!activeModalPortfolio) return;
+      toggleCompare(activeModalPortfolio.id);
+      openDetailModal(activeModalPortfolio.id);
+    }
+
+    function openDcaWithCurrent() {
+      if (!activeModalPortfolio) {
+        openDcaModal();
+        return;
+      }
+      const p = activeModalPortfolio;
+      closeDetailModal();
+      openDcaForPortfolio(p.id);
+    }
+
+    // --- QUICK COPY SYSTEM ---
+    function copyPortfolioDirect(id) {
+      const p = PORTFOLIOS.find(x => x.id === id);
+      if (!p) return;
+      const text = `${p.name} (#${p.id})\n` +
+        `Goal: ${p.category} | Risk: ${p.risk} | Max Drawdown: ${p.maxDrawdown} | Fee: ${p.expenseRatio}\n` +
+        `Allocation Breakdown:\n` +
+        p.allocations.map(a => `• ${a.ticker}: ${a.pct}% (${a.name})`).join('\n') +
+        `\nPrimary Risks: ${p.primaryRisks.join(', ')}\n` +
+        `Supported Brokers: ${p.brokerages.join(', ')}`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`Copied #${p.id} ${p.name} allocation to clipboard!`);
+      }).catch(() => {
+        showToast(`Selected #${p.id} allocation.`);
+      });
+    }
+
+    // --- COMPARISON SYSTEM ---
+    function toggleCompare(id) {
+      const idx = comparedPortfolioIds.indexOf(id);
+      if (idx > -1) {
+        comparedPortfolioIds.splice(idx, 1);
+        showToast("Removed from comparison");
+      } else {
+        if (comparedPortfolioIds.length >= 3) {
+          showToast("Maximum 3 portfolios can be compared simultaneously");
+          return;
+        }
+        comparedPortfolioIds.push(id);
+        showToast("Added to comparison drawer");
+      }
+      updateComparisonUI();
+      renderPortfolios();
+    }
+
+    function updateComparisonUI() {
+      const count = comparedPortfolioIds.length;
+      document.getElementById('compareBadge').innerText = count;
+      document.getElementById('protoCompareCount').innerText = count;
+      document.getElementById('compareCount').innerText = count;
+
+      const drawer = document.getElementById('compareDrawer');
+      if (count > 0) {
+        drawer.classList.remove('translate-y-full');
+      } else {
+        drawer.classList.add('translate-y-full');
+      }
+
+      const slots = document.getElementById('compareSlots');
+      slots.innerHTML = comparedPortfolioIds.map(id => {
+        const p = PORTFOLIOS.find(x => x.id === id);
+        if (!p) return '';
+        return `
+          <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 border border-slate-200 dark:border-slate-700 relative text-xs">
+            <button onclick="toggleCompare(${p.id})" class="absolute right-2 top-2 text-slate-400 hover:text-rose-500">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+            <div class="font-bold text-slate-900 dark:text-white mb-1 pr-6">${p.name}</div>
+            <div class="flex flex-wrap items-center gap-1.5 mb-2">
+              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded ${getRiskColor(p.risk)}">${p.risk}</span>
+              <span class="text-rose-600 dark:text-rose-400 font-bold text-[10px]">Drop: ${p.maxDrawdown}</span>
+              <span class="text-slate-400 text-[10px]">Fee: <b>${p.expenseRatio}</b></span>
+            </div>
+            <div class="space-y-1 pt-2 border-t border-slate-200 dark:border-slate-700">
+              ${p.allocations.map(a => `
+                <div class="flex justify-between items-center text-[11px]">
+                  <span class="font-semibold text-slate-700 dark:text-slate-300">${a.ticker}</span>
+                  <span class="font-bold text-emerald-600 dark:text-emerald-400">${a.pct}%</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function clearComparison() {
+      comparedPortfolioIds = [];
+      updateComparisonUI();
+      renderPortfolios();
+      showToast("Cleared comparison list");
+    }
+
+    function toggleCompareDrawer() {
+      const drawer = document.getElementById('compareDrawer');
+      if (comparedPortfolioIds.length === 0) {
+        showToast("Select at least 1 portfolio to compare");
+        return;
+      }
+      drawer.classList.toggle('translate-y-full');
+    }
+
+    // --- DCA COMPOUND CALCULATOR & PORTFOLIO INTEGRATION ---
+    let activeDcaPortfolio = null;
+
+    function getPortfolioCagrMidpoint(p) {
+      if (!p || !p.cagrEst) return 10.0;
+      const parts = p.cagrEst.split('-').map(s => parseFloat(s.replace('%', '').trim()));
+      if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+        return Math.round(((parts[0] + parts[1]) / 2) * 10) / 10;
+      } else if (parts.length === 1 && !isNaN(parts[0])) {
+        return parts[0];
+      }
+      return 10.0;
+    }
+
+    function openDcaForPortfolio(id) {
+      const p = PORTFOLIOS.find(x => x.id === id);
+      if (!p) {
+        openDcaModal();
+        return;
+      }
+      closeDetailModal();
+      openDcaModal(p);
+    }
+
+    function clearDcaPortfolioLink() {
+      activeDcaPortfolio = null;
+      openDcaModal(null);
+      showToast("Reset DCA Simulator to generic market benchmarks");
+    }
+
+    function renderDcaRateButtons(customRate = null, portfolioName = '') {
+      const container = document.getElementById('dcaRateButtonContainer');
+      if (!container) return;
+
+      const defaultOptions = [
+        { rate: 4.8, title: "4.8%", sub: "T-Bills/Cash" },
+        { rate: 7.5, title: "7.5%", sub: "Balanced 60/40" },
+        { rate: 10.0, title: "10.0%", sub: "S&P 500 / VTI" },
+        { rate: 13.0, title: "13.0%", sub: "Nasdaq / Tech" }
+      ];
+
+      let buttonsHtml = '';
+
+      if (customRate !== null) {
+        const isCustomActive = (Math.abs(dcaRate - customRate) < 0.05);
+        const shortName = portfolioName.length > 13 ? portfolioName.substring(0, 13) + '…' : portfolioName;
+        const activeCls = isCustomActive
+          ? 'active border-2 border-emerald-500 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 ring-2 ring-emerald-400/40'
+          : 'border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-emerald-500';
+
+        buttonsHtml += `
+          <button onclick="setDcaRate(${customRate}, this)" class="dca-rate-btn py-1.5 px-2 rounded text-xs text-center transition ${activeCls}">
+            <div class="font-extrabold text-xs flex items-center justify-center gap-1">
+              <i data-lucide="zap" class="w-3 h-3 text-amber-500 fill-amber-500"></i>
+              <span>${customRate}%</span>
+            </div>
+            <div class="text-[9px] font-semibold text-emerald-600 dark:text-emerald-400 truncate">${shortName || 'Portfolio'}</div>
+          </button>
+        `;
+      }
+
+      defaultOptions.forEach(opt => {
+        const isOptActive = (customRate === null && Math.abs(dcaRate - opt.rate) < 0.05);
+        const activeClass = isOptActive 
+          ? 'active border-2 border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
+          : 'border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-emerald-500';
+        buttonsHtml += `
+          <button onclick="setDcaRate(${opt.rate}, this)" class="dca-rate-btn py-1.5 px-2 rounded text-xs text-center transition ${activeClass}">
+            <div class="font-bold">${opt.title}</div>
+            <div class="text-[9px] text-slate-500">${opt.sub}</div>
+          </button>
+        `;
+      });
+
+      container.innerHTML = buttonsHtml;
+      lucide.createIcons();
+    }
+
+    function openDcaModal(p = null) {
+      activeDcaPortfolio = p;
+      document.getElementById('dcaModal').classList.remove('hidden');
+
+      const dcaSlider = document.getElementById('dcaFxSlider');
+      if (dcaSlider) dcaSlider.value = usdThbRate;
+      const dcaLabel = document.getElementById('dcaFxRateLabel');
+      if (dcaLabel) dcaLabel.innerText = `฿${usdThbRate.toFixed(2)}`;
+
+      const banner = document.getElementById('dcaPortfolioBanner');
+      const rateSourceTag = document.getElementById('dcaRateSourceTag');
+
+      if (p) {
+        banner.classList.remove('hidden');
+        document.getElementById('dcaPortfolioIdBadge').innerText = `#${p.id}`;
+        document.getElementById('dcaPortfolioName').innerText = p.name;
+
+        const riskBadge = document.getElementById('dcaPortfolioRiskBadge');
+        riskBadge.innerText = p.risk;
+        riskBadge.className = `text-[10px] font-semibold px-2 py-0.5 rounded-full ${getRiskColor(p.risk)}`;
+
+        const tickerBadges = p.allocations.map(a => `<span class="font-mono font-bold text-slate-700 dark:text-slate-200">${a.ticker} (${a.pct}%)</span>`).join(', ');
+        document.getElementById('dcaPortfolioMeta').innerHTML = `
+          <span>Allocations: ${tickerBadges}</span>
+          <span>·</span>
+          <span class="text-emerald-600 dark:text-emerald-400 font-semibold">Expected CAGR: ${p.cagrEst}</span>
+        `;
+
+        const portfolioCagr = getPortfolioCagrMidpoint(p);
+        dcaRate = portfolioCagr;
+        if (rateSourceTag) {
+          rateSourceTag.innerText = `Calibrated to #${p.id} CAGR (${portfolioCagr}%)`;
+        }
+        renderDcaRateButtons(portfolioCagr, p.name);
+      } else {
+        banner.classList.add('hidden');
+        if (rateSourceTag) {
+          rateSourceTag.innerText = "Generic benchmark mode";
+        }
+        renderDcaRateButtons(null);
+      }
+
+      updateDcaCalculations();
+      lucide.createIcons();
+    }
+
+    function closeDcaModal() {
+      document.getElementById('dcaModal').classList.add('hidden');
+    }
+
+    function setDcaRate(rate, btn) {
+      dcaRate = parseFloat(rate);
+      document.querySelectorAll('.dca-rate-btn').forEach(b => {
+        b.classList.remove('active', 'border-2', 'border-emerald-500', 'bg-emerald-500/10', 'bg-emerald-500/15', 'text-emerald-600', 'dark:text-emerald-400', 'text-emerald-700', 'ring-2', 'ring-emerald-400/40');
+        b.classList.add('border-slate-300', 'dark:border-slate-700');
+      });
+      if (btn) {
+        btn.classList.add('active', 'border-2', 'border-emerald-500', 'bg-emerald-500/10', 'text-emerald-600', 'dark:text-emerald-400');
+        btn.classList.remove('border-slate-300', 'dark:border-slate-700');
+      }
+      updateDcaCalculations();
+    }
+
+    function updateDcaCalculations() {
+      const monthly = parseFloat(document.getElementById('dcaMonthlySlider').value);
+      const initial = parseFloat(document.getElementById('dcaInitialSlider').value);
+      const years = parseInt(document.getElementById('dcaYearsSlider').value);
+
+      document.getElementById('dcaMonthlyLabel').innerText = `${formatMoney(monthly)} / month`;
+      document.getElementById('dcaInitialLabel').innerText = `${formatMoney(initial)}`;
+      document.getElementById('dcaYearsLabel').innerText = `${years} ${years === 1 ? 'Year' : 'Years'}`;
+
+      const totalMonths = years * 12;
+      const monthlyRate = (dcaRate / 100) / 12;
+
+      let futureValueContributions = 0;
+      if (monthlyRate > 0) {
+        futureValueContributions = monthly * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate);
+      } else {
+        futureValueContributions = monthly * totalMonths;
+      }
+
+      const futureValueInitial = initial * Math.pow(1 + monthlyRate, totalMonths);
+      const totalPortfolio = Math.round(futureValueInitial + futureValueContributions);
+
+      const totalDeposited = Math.round(initial + (monthly * totalMonths));
+      const totalInterest = Math.max(0, totalPortfolio - totalDeposited);
+      const gainPercent = totalDeposited > 0 ? ((totalInterest / totalDeposited) * 100).toFixed(1) : 0;
+
+      document.getElementById('dcaTotalValue').innerText = formatMoney(totalPortfolio);
+      document.getElementById('dcaTotalDeposited').innerText = formatMoney(totalDeposited);
+      document.getElementById('dcaTotalInterest').innerText = `+${formatMoney(totalInterest)}`;
+      document.getElementById('dcaGainPercent').innerText = `+${gainPercent}%`;
+
+      // Dual-currency real-time conversion
+      const equivEl = document.getElementById('dcaEquivText');
+      if (equivEl) {
+        if (activeCurrency === 'THB') {
+          const usdVal = Math.round(totalPortfolio / usdThbRate);
+          equivEl.innerText = `≈ $${usdVal.toLocaleString()} USD (@ ฿${usdThbRate.toFixed(2)}/USD)`;
+        } else {
+          const thbVal = Math.round(totalPortfolio * usdThbRate);
+          equivEl.innerText = `≈ ฿${thbVal.toLocaleString()} THB (@ ฿${usdThbRate.toFixed(2)}/USD)`;
+        }
+      }
+
+      // Contextual title on projection card
+      const contextTitle = document.getElementById('dcaProjectedContextLabel');
+      if (contextTitle) {
+        if (activeDcaPortfolio) {
+          contextTitle.innerHTML = `Projected for <span class="text-emerald-400 font-bold">#${activeDcaPortfolio.id} ${activeDcaPortfolio.name}</span> (@ ${dcaRate}% p.a.)`;
+        } else {
+          contextTitle.innerText = `Projected Compound Portfolio Value (@ ${dcaRate}% p.a.)`;
+        }
+      }
+
+      const depositPct = totalPortfolio > 0 ? Math.min(100, Math.round((totalDeposited / totalPortfolio) * 100)) : 100;
+      const growthPct = Math.max(0, 100 - depositPct);
+
+      document.getElementById('dcaDepositPct').innerText = `${depositPct}%`;
+      document.getElementById('dcaGrowthPct').innerText = `${growthPct}%`;
+      document.getElementById('dcaDepositBar').style.width = `${depositPct}%`;
+      document.getElementById('dcaGrowthBar').style.width = `${growthPct}%`;
+    }
+
+    // --- GOAL FINDER QUIZ ---
+    function openQuizModal() {
+      document.getElementById('quizModal').classList.remove('hidden');
+    }
+
+    function closeQuizModal() {
+      document.getElementById('quizModal').classList.add('hidden');
+    }
+
+    function submitQuiz(e) {
+      e.preventDefault();
+      const goal = document.querySelector('input[name="quizGoal"]:checked').value;
+      const risk = document.querySelector('input[name="quizRisk"]:checked').value;
+
+      closeQuizModal();
+
+      currentCategory = goal;
+      currentRisk = risk;
+      document.getElementById('riskSelect').value = risk;
+      
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        if (btn.dataset.cat === goal) {
+          btn.classList.add('bg-emerald-600', 'text-white');
+          btn.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+        } else {
+          btn.classList.remove('bg-emerald-600', 'text-white');
+          btn.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+        }
+      });
+
+      renderPortfolios();
+      showToast(`Quiz matched! Showing recommendations for ${goal.toUpperCase()} (${risk}).`);
+    }
+
+    // --- TOAST NOTIFICATION ---
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2600);
+    }
+  </script>
+</body>
+</html>
